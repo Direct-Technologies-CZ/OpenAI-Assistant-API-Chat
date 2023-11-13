@@ -104,7 +104,8 @@ export default function Chat() {
 
     return (
         <main className="flex flex-col items-center justify-between pb-40 bg-space-grey-light">
-
+			<img src="https://www.direct-technologies.cz/static/header/direct-technologies-black.svg" alt="logo" style={{width: "100px", marginTop:"10px", marginBottom: "20px"}}/>
+            Jak ti mohu dneska pomoci?
             <MessageList chatMessages={chatMessages}/>
 
             <InputForm
