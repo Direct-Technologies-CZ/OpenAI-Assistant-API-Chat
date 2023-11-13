@@ -5,12 +5,10 @@ import MessageList from '../app/components/MessageList';
 import InputForm from '../app/components/InputForm';
 
 import "../app/globals.css";
-//import { Inter } from "next/font/google";
 
 import { useRef, useState } from "react";
 import { useChat } from "ai/react";
 import va from "@vercel/analytics";
-//import { VercelIcon, GithubIcon, LoadingCircle, SendIcon } from ".icons";
 import { Bot, User } from "lucide-react";
 
 
@@ -35,24 +33,12 @@ export default function Chat() {
   const disabled = isLoading || input.length === 0;
 
   // State variables for managing various aspects of the chat assistant
-  const [assistantName, setAssistantName] = useState('TST> Pojistné podmínky');
-  const [assistantModel, setAssistantModel] = useState('gpt-4-1106-preview');
-  const [assistantDescription, setAssistantDescription] = useState('Vystupuj jako zkušený operátor a pojišťovací agent v pojišťovně. Odpovídej na dotazy. Uživateli tykej, je to tvůj kolega. Neposílej ho za pojišťovacím agentem, neobracej ho na pojišťovnu, ani mu nedoporučuj přečíst si pojistné podmínky. Odpovídej tak, jako bys byl ten jediný kdo mu může pomoci. Komunikuj v češtině. Rozlišuj cestovní pojištění, havarijní pojištění a povinné ručení. Nepředstavuj se.');
   const [inputmessage, setInputmessage] = useState('Introduce yourself');
-  const [chatMessages, setChatMessages] = useState<{ role: string; content: any; }[]>(['test']);
+  const [chatMessages, setChatMessages] = useState<{ role: string; content: any; }[]>([{ role: 'assistant', content: '' }]);
   const [chatStarted, setChatStarted] = useState(true);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [file, setFile] = useState<File>();
   const [assistantId, setAssistantId] = useState('asst_zZ946HIwPnYgzZFOutkR50Y7');
-  const [threadId, setThreadId] = useState(''); //'thread_KtCz6Eivl0xbKBRleGxkGBtp');
-  const [isStartLoading, setStartLoading] = useState(false);
+  const [threadId, setThreadId] = useState('');
   const [isSending, setIsSending] = useState(false);
-  
-  
-  // Handler for file input changes
-  const handleFileChange = (selectedFile: File) => {
-    setFile(selectedFile);
-  };
 
   const createThreadAsync = async () => {
     // Create thread
@@ -170,161 +156,6 @@ export default function Chat() {
   };
 
 
-
-  async function startAssistant() {
-    if (!assistantName || !assistantModel || !assistantDescription || !inputmessage) {
-      console.error('All fields must be filled');
-      return;
-    }
-    console.log('Initializing chat assistant.');
-    setStartLoading(true);
-    setIsButtonDisabled(true);
-  
-    // Preparing file data for upload
-    const fileInput = document.getElementById('file-input') as HTMLInputElement;
-    const file = fileInput && fileInput.files ? fileInput.files[0] : null;
-  
-    let fileId = null;
-    if (file) {
-      // Uploading file data
-      console.log('Uploading file data.');
-      const fileData = new FormData();
-      fileData.set('file', file);
-  
-      const uploadResponse = await fetch('/api/upload', {
-        method: 'POST',
-        body: fileData,
-      });
-      const uploadData = await uploadResponse.json();
-  
-      if (!uploadResponse.ok) {
-        console.error('File upload failed:', uploadData.message);
-        return;
-      }
-      fileId = uploadData.fileId;
-      console.log('File uploaded successfully, ID:', fileId);
-    }
-  
-    // Create assistant
-    console.log('Creating assistant.');
-    const assistantData = new FormData();
-    assistantData.set('assistantName', assistantName);
-    assistantData.set('assistantModel', assistantModel);
-    assistantData.set('assistantDescription', assistantDescription);
-    if (fileId) {
-      assistantData.set('fileId', fileId);
-    }
-  
-    const createAssistantResponse = await fetch('/api/createAssistant', {
-      method: 'POST',
-      body: assistantData,
-    });
-    const createAssistantData = await createAssistantResponse.json();
-  
-    if (!createAssistantResponse.ok) {
-      console.error('Error creating assistant:', createAssistantData.error);
-      return;
-    }
-    const assistantId = createAssistantData.assistantId;
-  
-    // Create thread
-    console.log('Creating thread.');
-    const threadData = new FormData();
-    threadData.set('inputmessage', inputmessage);
-  
-    const createThreadResponse = await fetch('/api/createThread', {
-      method: 'POST',
-      body: threadData,
-    });
-    const createThreadData = await createThreadResponse.json();
-  
-    if (!createThreadResponse.ok) {
-      console.error('Error creating thread:', createThreadData.error);
-      return;
-    }
-    const threadId = createThreadData.threadId;
-  
-    // Run assistant
-    console.log('Running assistant.');
-    const runAssistantData = new FormData();
-    runAssistantData.set('assistantId', assistantId);
-    runAssistantData.set('threadId', threadId);
-  
-    const runAssistantResponse = await fetch('/api/runAssistant', {
-      method: 'POST',
-      body: runAssistantData,
-    });
-    const runAssistantDataResponse = await runAssistantResponse.json();
-  
-    if (!runAssistantResponse.ok) {
-      console.error('Error running assistant:', runAssistantDataResponse.error);
-      return;
-    }
-  
-    // Check run status
-    let formData_checkRunStatus = new FormData();
-    formData_checkRunStatus.append('threadId', threadId);
-    formData_checkRunStatus.append('runId', runAssistantDataResponse.runId);
-    
-    let checkRunStatusData;
-    do {
-      const checkRunStatusResponse = await fetch('/api/checkRunStatus', {
-        method: 'POST',
-        body: formData_checkRunStatus,
-      });
-      checkRunStatusData = await checkRunStatusResponse.json();
-    
-      console.log('Run status:', checkRunStatusData.status); // Log the status each time
-    
-      // Return if the run appears dead
-      if (
-        checkRunStatusData.status === "cancelled" ||
-        checkRunStatusData.status === "cancelling" ||
-        checkRunStatusData.status === "failed" ||
-        checkRunStatusData.status === "expired"
-      ) {
-        console.error(`Run stopped due to status: ${checkRunStatusData.status}`);
-        return;
-      }
-    
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Delay for 1 second
-    } while (checkRunStatusData.status !== 'completed');
-    
-    // After the run has completed
-    console.log('Get Messages from listMessages.');
-    const listMessagesResponse = await fetch('/api/listMessages', {
-      method: 'POST',
-      body: formData_checkRunStatus,
-    });
-    const listMessagesData = await listMessagesResponse.json();
-    console.log('Messages retrieved from listMessages API endpoint.');
-
-    if (listMessagesResponse.ok) {
-      // Log the content of the message
-      console.log('Message content:', listMessagesData.messages);
-
-      // Add the message to the chat
-      console.log('Adding assistant\'s message to the chat.');
-      setChatMessages(prevMessages => [
-        ...prevMessages,
-        { role: 'assistant', content: listMessagesData.messages }
-      ]);
-    setIsButtonDisabled(false);
-    } else {
-      console.error('Error fetching messages');
-    }
-  
-    setAssistantId(assistantId);
-    setThreadId(threadId);
-    setChatStarted(true);
-    //setIsButtonDisabled(false);
-    console.log('Chat with assistant started successfully.');
-  }
-  
-  
-
-
-  
 
   return (
 
