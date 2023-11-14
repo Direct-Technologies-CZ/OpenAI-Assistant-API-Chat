@@ -1,8 +1,16 @@
 # OpenAI Assistant API Chat
+<img src="https://raw.githubusercontent.com/admineral/OpenAI-Assistant-API-Chat/main/Public/Image.png" width="600">
 
 ## Introduction
 
 Welcome to the OpenAI Assistant API Chat repository! This innovative chat application allows users to interact with an AI assistant powered by OpenAI's latest "gpt-4-1106-preview" model. It's an exciting space where technology meets conversation, offering a unique experience of AI interaction.
+
+
+
+
+<img src="Public/File_upload.gif" alt="Agent42" width="600px">
+[LIVE DEMO](https://open-ai-assistant-api-chat.vercel.app)
+
 
 ## Features
 
@@ -17,9 +25,15 @@ Welcome to the OpenAI Assistant API Chat repository! This innovative chat applic
    - **Optical Character Recognition (OCR)**: The AI can analyze text within images, making it possible to read and respond to textual content in photographs or scanned documents.
 
 
+<img src="Public/Image_upload.gif" alt="Agent42" width="600px">
+[GPT4-Vision api router ](https://github.com/admineral/OpenAI-Assistant-API-Chat/tree/main/app/api/upload_gpt4v/route.ts)
+
+
+
 ## Beta & Work in Progress
 
 Please note that this application is currently in the beta phase and is continuously evolving. We are working diligently to enhance the user experience and add new features. During this phase, you may encounter some hiccups or unexpected behavior.
+
 
 ## Getting Started
 

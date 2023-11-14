@@ -16,6 +16,7 @@ dist/
 
 # Log files
 *.log
+.DS_Store
 
 # Package files
 *.jar
