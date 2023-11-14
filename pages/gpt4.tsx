@@ -73,10 +73,15 @@ export default function Chat() {
         setStatusMessage('Creating assistant.');
         console.log('Creating assistant.');
 
-        const assistantId = 'asst_aoXDGMp04YBqRQuaRO9ilXGT';
-
         let searchParams = new URLSearchParams(window.location.search);
+        let assistantIdParam = searchParams.get("assistantId");
 
+        if (!assistantIdParam) {
+            assistantIdParam =  'asst_aoXDGMp04YBqRQuaRO9ilXGT';
+        }
+
+
+        const assistantId = assistantIdParam;
 
         setStatusMessage('Creating thread.');
         console.log('Creating thread.');
