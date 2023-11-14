@@ -1,29 +1,39 @@
 //app/page.tsx
 "use client";
 
+import { useEffect } from 'react';
+import { useRef} from "react";
+import { useChat } from "ai/react";
+import va from "@vercel/analytics";
 import MessageList from '../app/components/MessageList';
 import InputForm from '../app/components/InputForm';
-import {useRef, useState} from "react";
-import {useChat} from "ai/react";
-import va from "@vercel/analytics";
+import { useChatState } from '../app/hooks/useChatState';
 import {
     createThread,
     runAssistant,
     checkRunStatus,
     listMessages,
     addMessage,
-} from '@/app/api';
+} from '../app/services/api';
 
 import "../app/globals.css";
+import WelcomeForm from "@/app/components/WelcomeForm";
 
 // Chat component that manages the chat interface and interactions
 export default function Chat() {
+
+    useEffect(() => {
+        // Spustí metodu startAssistant při prvním načtení komponenty
+        startAssistant();
+    }, []);
+
+
     // Refs for form and input elements
     const formRef = useRef<HTMLFormElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
 
     // Custom hook to manage chat state and interactions
-    const {input, setInput, isLoading} = useChat({
+    const { input, setInput, isLoading} = useChat({
         // Error handling callback
         onError: (error) => {
             va.track("Chat errored", {
@@ -36,29 +46,106 @@ export default function Chat() {
     // Determine if the chat interface should be disabled
     const disabled = isLoading || input.length === 0;
 
-    // State variables for managing various aspects of the chat assistant
-    const [chatMessages, setChatMessages] = useState<{ role: string; content: any; }[]>([]);
-    const [chatStarted, setChatStarted] = useState(true);
-    const [assistantId, setAssistantId] = useState('asst_aoXDGMp04YBqRQuaRO9ilXGT');
-    const [threadId, setThreadId] = useState<string | null>(null);
-    const [isSending, setIsSending] = useState(false);
+    const {
+        assistantName, setAssistantName,
+        assistantModel, setAssistantModel,
+        assistantDescription, setAssistantDescription,
+        inputmessage, setInputmessage,
+        chatMessages, setChatMessages,
+        chatStarted, setChatStarted,
+        isButtonDisabled, setIsButtonDisabled,
+        file, setFile,
+        assistantId, setAssistantId,
+        threadId, setThreadId,
+        isStartLoading, setStartLoading,
+        isSending, setIsSending,
+        statusMessage, setStatusMessage,
+        counter,
+    } = useChatState();
+
+    async function startAssistant() {
+        setStatusMessage('Initializing chat assistant.');
+        console.log('Initializing chat assistant.');
+        setStartLoading(true);
+        setIsButtonDisabled(true);
 
 
-    if (threadId) {
-    } else {
-        startAssistant();
+        setStatusMessage('Creating assistant.');
+        console.log('Creating assistant.');
+
+        const assistantId = 'asst_aoXDGMp04YBqRQuaRO9ilXGT';
+
+        let searchParams = new URLSearchParams(window.location.search);
+
+
+        setStatusMessage('Creating thread.');
+        console.log('Creating thread.');
+        const threadData = await createThread('Introduce yourself');
+        const threadId = threadData.threadId;
+
+        setStatusMessage('Running assistant.');
+        console.log('Running assistant.');
+        const runAssistantData = await runAssistant(assistantId, threadId);
+
+        let checkRunStatusData;
+        counter.current = 0;
+        do {
+            checkRunStatusData = await checkRunStatus(threadId, runAssistantData.runId);
+            counter.current += 1; // Increment counter
+            setStatusMessage(`Running assistant - ${checkRunStatusData.status} (${counter.current} seconds elapsed)`);
+            console.log('Run status:', checkRunStatusData.status);
+
+            if (["cancelled", "cancelling", "failed", "expired"].includes(checkRunStatusData.status)) {
+                console.error(`Run stopped due to status: ${checkRunStatusData.status}`);
+                return;
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        } while (checkRunStatusData.status !== 'completed');
+
+
+        // Log the threadId and runId being used
+        console.log('Using threadId:', threadId, 'and runId:', runAssistantData.runId);
+        console.log('Fetching messages from listMessages API endpoint.');
+        const listMessagesData = await listMessages(threadId, runAssistantData.runId);
+
+        // Log the entire response data
+        console.log('Received data from listMessages:', listMessagesData);
+
+        if (listMessagesData.ok) {
+            setStatusMessage('Done');
+            console.log('Message content:', listMessagesData.messages);
+            setChatMessages(prevMessages => {
+                console.log('Previous messages:', prevMessages);
+                console.log('Adding new messages to chat');
+                return [...prevMessages, { role: 'assistant', content: listMessagesData.messages }];
+            });
+            console.log('Setting isButtonDisabled to false');
+            setIsButtonDisabled(false);
+        } else {
+            setStatusMessage('Error retrieving messages.');
+            console.error('Error fetching messages');
+        }
+
+        setAssistantId(assistantId);
+        setThreadId(threadId);
+        setChatStarted(true);
+        setStatusMessage('Done');
+        console.log('Chat with assistant started successfully.');
     }
 
     // Handler for form submissions
-    const handleFormSubmit = async (e: any) => {
+    const handleFormSubmit = async (e:any) => {
+
         e.preventDefault();
+
         console.log('Handling form submission.');
 
         setIsSending(true);
-        setChatMessages(prevMessages => [...prevMessages, {role: 'user', content: input}]);
+        setChatMessages(prevMessages => [...prevMessages, { role: 'user', content: input }]);
         setInput('');
 
-        let data = {input, threadId};
+        let data = { input, threadId };
 
         console.log('Sending message to addMessage API endpoint.');
         const addMessageData = await addMessage(data);
@@ -83,30 +170,21 @@ export default function Chat() {
 
         if (listMessagesData.ok) {
             console.log('Adding assistant\'s message to the chat.');
-            setChatMessages(prevMessages => [...prevMessages, {role: 'assistant', content: listMessagesData.messages}]);
+            setChatMessages(prevMessages => [...prevMessages, { role: 'assistant', content: listMessagesData.messages }]);
         } else {
             console.error('Error retrieving messages:', listMessagesData.error);
         }
     };
 
-
-    async function startAssistant() {
-
-        console.log('Creating thread.');
-        const threadData = await createThread('Introduce yourself');
-        const threadId = threadData.threadId;
-
-        setThreadId(threadId);
-        setChatStarted(true);
-
-        console.log('Chat with assistant started successfully.');
-    }
-
     return (
         <main className="flex flex-col items-center justify-between pb-40 bg-space-grey-light">
-			<img src="https://www.direct-technologies.cz/static/header/direct-technologies-black.svg" alt="logo" style={{width: "100px", marginTop:"10px", marginBottom: "20px"}}/>
-            Jak ti mohu dneska pomoci?
-            <MessageList chatMessages={chatMessages}/>
+            <img src="https://www.direct-technologies.cz/static/header/direct-technologies-black.svg" alt="logo" style={{width: "100px", marginTop:"10px", marginBottom: "20px"}}/>
+
+            {chatMessages.length > 0 ? (
+                <MessageList chatMessages={chatMessages} />
+            ) : (
+                <span>navazuji komunikaci s GPT ...</span>
+            )}
 
             <InputForm
                 input={input}
