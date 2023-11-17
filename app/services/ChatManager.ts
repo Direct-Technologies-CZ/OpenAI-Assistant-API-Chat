@@ -65,6 +65,60 @@ class ChatManager {
     return this.instance;
   }
 
+    async startAssistantById(assistantId: string, initialMessage: string): Promise<void> {
+        console.log('Starting assistant...');
+
+        this.state.setStatusMessage('Initializing chat assistant...');
+        this.state.isLoading = true;
+
+        try {
+            this.state.setStatusMessage('Creating thread...');
+            this.state.assistantId = assistantId;
+            const threadId = await createChatThread(initialMessage);
+            if (threadId === null) {
+                throw new Error('ThreadId is null');
+            }
+            this.state.setStatusMessage('Received thread_ID...');
+
+            this.state.setStatusMessage('Running assistant...');
+            this.state.threadId = threadId;
+            const runId = await runChatAssistant(this.state.assistantId, this.state.threadId);
+            if (runId === null) {
+                throw new Error('RunId is null');
+            }
+
+            this.state.runId = runId;
+            this.state.setStatusMessage('Received Run_ID..');
+
+            if (this.state.runId && this.state.threadId) {
+                const runId = this.state.runId as string;
+                const threadId = this.state.threadId as string;
+                this.state.setStatusMessage('checking status...');
+                const assistantResponse = await fetchAssistantResponse(runId, threadId);
+
+                this.state.setStatusMessage('Run complete...');
+                this.state.assistantResponseReceived = true;
+                this.state.setStatusMessage('Received messages...');
+
+                const newMessage = { role: 'assistant', content: assistantResponse };
+                this.state.setStatusMessage('Adding messages to chat...');
+
+                this.state.messages = [...this.state.messages, newMessage];
+                this.state.setChatMessages(this.state.messages);
+
+            } else {
+                console.error('RunId or ThreadId is null. Current state:', this.state);
+            }
+
+        } catch (error) {
+            this.state.setStatusMessage('Error!');
+            this.state.error = error as Error;
+            console.error('Error in starting assistant:', error);
+        } finally {
+            this.state.setStatusMessage('Done');
+            this.state.isLoading = false;
+        }
+    }
   async startAssistant(assistantDetails: any, file: File | null, initialMessage: string): Promise<void> {
     console.log('Starting assistant...');
   
