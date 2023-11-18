@@ -24,6 +24,8 @@ export const useChatState = () => {
   const [chatManager, setChatManager] = useState<ChatManager | null>(null);
   const [assistantId, setAssistantId] = useState<string | null>(process.env.REACT_APP_ASSISTANT_ID || '');
   const [isMessageLoading, setIsMessageLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [isLoadingFirstMessage, setIsLoadingFirstMessage] = useState(false);
 
   return {
     assistantName, setAssistantName,
@@ -46,6 +48,9 @@ export const useChatState = () => {
     setInitialThreadMessage,
     chatManager, setChatManager,
     isMessageLoading, setIsMessageLoading,
+    progress, setProgress,
+    isLoadingFirstMessage, setIsLoadingFirstMessage,
     
+
   };
 };

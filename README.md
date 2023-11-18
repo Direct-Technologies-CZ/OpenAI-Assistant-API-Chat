@@ -1,18 +1,43 @@
+
+
 # OpenAI Assistant API Chat
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fadmineral%2FOpenAI-Assistant-API-Chat&env=OPENAI_API_KEY&envDescription=OpenAI%20API%20Key&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys&project-name=openai-assistant-api-chat&repository-name=OpenAI-Assistant-API-Chat)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-green.svg)](https://open-ai-assistant-api-chat.vercel.app)
 
 ## Introduction
 
 Welcome to the OpenAI Assistant API Chat repository! This innovative chat application allows users to interact with an AI assistant powered by OpenAI's latest "gpt-4-1106-preview" model. It's an exciting space where technology meets conversation, offering a unique experience of AI interaction.
 
-
-
-# Demo
+# [Demo](https://open-ai-assistant-api-chat.vercel.app)
 <img src="Public/File_upload.gif" alt="Agent42" width="600px">
-In the demo, you can see the AI assistant in action.
-[LIVE DEMO](https://open-ai-assistant-api-chat.vercel.app)
+
+## Newest Features
+
+- **Progress Bar During Chat**: The application now includes a progress bar that provides visual feedback during the chat. This helps users understand the status of the chat and enhances the overall user experience.
+
+- **Hard Coded Assistant ID**: You can now set a default assistant ID in the`.env` check out the  `.env.example` file. This allows you to specify a default assistant for the chat. If this value is set, the application will use this assistant for the chat. If this value is not set, the application will prompt the user to enter the assistant details. Here's how you can set it:
+
+
+
+
+
+## Deployment
+
+This application is ready to be deployed with Vercel, a cloud platform for static sites and Serverless Functions. Vercel provides an easy way to deploy your applications directly from your repository.
+
+To deploy this application with Vercel, click on the "Deploy with Vercel" button below. This will take you to the Vercel platform where you'll be guided through the deployment process.
+
+Please note that you'll need to provide your OpenAI API key during the deployment process. This key is used to authenticate your application's requests to the OpenAI API.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fadmineral%2FOpenAI-Assistant-API-Chat&env=OPENAI_API_KEY&envDescription=OpenAI%20API%20Key&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys&project-name=openai-assistant-api-chat&repository-name=OpenAI-Assistant-API-Chat)
 
+
+In addition to the OpenAI API key, you can also specify a default Assistant ID during the deployment process. This ID determines which AI assistant is used in the chat application. If you set this ID, the application will use this assistant for the chat. If you do not set this ID, the application will prompt the user to enter the assistant details.
+
+To deploy the application with both the OpenAI API key and a hardcoded Assistant ID, click on the "Deploy with Vercel" button below. You will be prompted to enter both your OpenAI API key and your Assistant ID.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fadmineral%2FOpenAI-Assistant-API-Chat&env=OPENAI_API_KEY,REACT_APP_ASSISTANT_ID&envDescription=OpenAI%20API%20Key,Assistant%20ID&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys&project-name=openai-assistant-api-chat&repository-name=OpenAI-Assistant-API-Chat)
 ## Features
 
 - **Personalized AI Assistant**: Customize the assistant's name, model, and description for a unique chat experience.

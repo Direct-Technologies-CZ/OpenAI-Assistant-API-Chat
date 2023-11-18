@@ -6,11 +6,12 @@ export const useChatManager = (
   setChatMessages: Dispatch<SetStateAction<any[]>>, 
   setStatusMessage: Dispatch<SetStateAction<string>>, 
   setChatManager: Dispatch<SetStateAction<ChatManager | null>>, 
-  setIsMessageLoading: Dispatch<SetStateAction<boolean>>
+  setIsMessageLoading: Dispatch<SetStateAction<boolean>>,
+  setProgress: Dispatch<SetStateAction<number>>,
+  setIsLoadingFirstMessage: Dispatch<SetStateAction<boolean>> // Add this line
 ) => {
   useEffect(() => {
-    const chatManagerInstance = ChatManager.getInstance(setChatMessages, setStatusMessage);
-    setChatManager(chatManagerInstance);
-    setIsMessageLoading(chatManagerInstance.getChatState().isLoading);
-  }, [setChatMessages, setStatusMessage, setChatManager, setIsMessageLoading]);
+    const chatManager = ChatManager.getInstance(setChatMessages, setStatusMessage, setProgress, setIsLoadingFirstMessage); // Add setIsLoadingFirstMessage here
+    setChatManager(chatManager);
+  }, [setChatMessages, setStatusMessage, setProgress, setIsLoadingFirstMessage]); // And here
 };
