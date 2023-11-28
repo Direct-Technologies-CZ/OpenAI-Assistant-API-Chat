@@ -17,7 +17,7 @@ export default function Chat() {
         inputmessage, setInputmessage,
         chatMessages, setChatMessages,
         isButtonDisabled, setIsButtonDisabled,
-        file = null, setFile,
+        files = null, setFiles,
         isStartLoading, setStartLoading,
         statusMessage, setStatusMessage,
         isSending, setIsSending,
@@ -61,7 +61,6 @@ export default function Chat() {
             }
         }
     };
-    const handleFileChange = (selectedFile: File) => setFile(selectedFile);
 
     return (
         <main className="flex flex-col items-center justify-between pb-40 bg-space-grey-light">
