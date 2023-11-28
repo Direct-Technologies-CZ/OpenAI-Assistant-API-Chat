@@ -67,7 +67,7 @@ export default function Chat() {
         <main className="flex flex-col items-center justify-between pb-40 bg-space-grey-light">
             <img src="https://www.direct-technologies.cz/static/header/direct-technologies-black.svg" alt="logo"
                  style={{width: "100px", marginTop: "10px", marginBottom: "20px"}}/>
-            {chatHasStarted || assistantId || isLoadingFirstMessage ? (
+            {chatHasStarted || assId || isLoadingFirstMessage ? (
                 <MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending}
                              progress={progress} isFirstMessage={isLoadingFirstMessage}/>
             ) : (
