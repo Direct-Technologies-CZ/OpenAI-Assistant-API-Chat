@@ -2,6 +2,13 @@
 import { useState, useRef } from 'react';
 import ChatManager from '../services/ChatManager';
 
+
+type FileDetail = {
+  name: string;
+  type: string;
+  size: number;
+};
+
 export const useChatState = () => {
   
   
@@ -26,6 +33,9 @@ export const useChatState = () => {
   const [isMessageLoading, setIsMessageLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isLoadingFirstMessage, setIsLoadingFirstMessage] = useState(false);
+  const [chatUploadedFiles, setChatUploadedFiles] = useState<File[]>([]);
+  const [chatFileDetails, setChatFileDetails] = useState<FileDetail[]>([]);
+
 
   return {
     assistantName, setAssistantName,
@@ -50,6 +60,8 @@ export const useChatState = () => {
     isMessageLoading, setIsMessageLoading,
     progress, setProgress,
     isLoadingFirstMessage, setIsLoadingFirstMessage,
+    chatUploadedFiles, setChatUploadedFiles,
+    chatFileDetails, setChatFileDetails,
     
 
   };

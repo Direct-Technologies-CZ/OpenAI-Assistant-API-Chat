@@ -28,8 +28,12 @@ export default function Chat() {
     isMessageLoading, setIsMessageLoading,
     progress, setProgress, 
     isLoadingFirstMessage,
-    setIsLoadingFirstMessage
+    setIsLoadingFirstMessage,
+    chatUploadedFiles = [], setChatUploadedFiles,
+    chatFileDetails, setChatFileDetails,
   } = useChatState();
+
+  
 
 
 
@@ -57,23 +61,21 @@ export default function Chat() {
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // If a message is being sent, return immediately
     if (isSending) {
       return;
     }
-    // Save the message
     const message = inputmessage;
-    // Clear the input
     setInputmessage('');
-    // Disable sending
     setIsSending(true);
     if (chatManager) {
+      const currentFiles = chatUploadedFiles; // Save current files
+      setChatUploadedFiles([]); // Reset the state after files are uploaded
+      setChatFileDetails([]); // Reset the file details state
       try {
-        await chatManager.sendMessage(message);
+        await chatManager.sendMessage(message, currentFiles); // Send the saved files
       } catch (error) {
         console.error('Error sending message:', error);
       } finally {
-        // Enable sending
         setIsSending(false);
       }
     }
@@ -81,6 +83,32 @@ export default function Chat() {
   
   //This function takes an array of File objects (the files selected by the user) and uses the setFiles function to update the files state.
   const handleFilesChange = (selectedFiles: File[]) => setFiles(selectedFiles);
+
+  const handleChatFilesUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const newFiles = Array.from(event.target.files);
+      if (chatFileDetails.length + newFiles.length > 10) {
+        alert('You can only upload up to 10 files.');
+        return;
+      }
+      const fileArray = newFiles.map((file) => ({
+        name: file.name,
+        type: file.type,
+        size: file.size,
+      }));
+      setChatFileDetails(prevFiles => [...prevFiles, ...fileArray]);
+      setChatUploadedFiles(prevFiles => [...prevFiles, ...newFiles]);
+    }
+    event.target.value = ''; // Clear the input's value
+  };
+
+  const removeChatFile = (fileName: string) => {
+    const updatedFileDetails = chatFileDetails.filter((file) => file.name !== fileName);
+    setChatFileDetails(updatedFileDetails);
+  
+    const updatedUploadedFiles = chatUploadedFiles.filter((file) => file.name !== fileName);
+    setChatUploadedFiles(updatedUploadedFiles);
+  };
 
   return (
     <main className="flex flex-col items-center justify-between pb-40 bg-space-grey-light">
@@ -90,7 +118,7 @@ export default function Chat() {
       ) : (
         <WelcomeForm {...{assistantName, setAssistantName, assistantDescription, setAssistantDescription, assistantModel, setAssistantModel, files, handleFilesChange, startChatAssistant, isButtonDisabled, isStartLoading, statusMessage}} />
       )}
-      <InputForm {...{input: inputmessage, setInput: setInputmessage, handleFormSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading}} />
+      <InputForm {...{input: inputmessage, setInput: setInputmessage, handleFormSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading, handleChatFilesUpload, chatFileDetails, removeChatFile}} />
     </main>
   );
 }
