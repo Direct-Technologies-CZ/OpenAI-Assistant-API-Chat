@@ -53,7 +53,7 @@ export default function Chat() {
             setChatUploadedFiles([]); // Reset the state after files are uploaded
             setChatFileDetails([]); // Reset the file details state
             try {
-                await chatManager.sendMessage(message, currentFiles); // Send the saved files
+                await chatManager.sendMessage(message, currentFiles, chatFileDetails);// Send the saved files
             } catch (error) {
                 console.error('Error sending message:', error);
             } finally {
@@ -96,8 +96,7 @@ export default function Chat() {
             <img src="https://www.direct-technologies.cz/static/header/direct-technologies-black.svg" alt="logo"
                  style={{width: "100px", marginTop: "10px", marginBottom: "20px"}}/>
             {chatHasStarted || assId || isLoadingFirstMessage ? (
-                <MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending}
-                             progress={progress} isFirstMessage={isLoadingFirstMessage}/>
+                <MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending} progress={progress} isFirstMessage={isLoadingFirstMessage} fileDetails={chatFileDetails} />
             ) : (
                 <span>navazuji komunikaci s GPT ...</span>
             )}
