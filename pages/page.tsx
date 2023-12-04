@@ -2,12 +2,12 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import ChatManager from './services/ChatManager';
-import LinkBar from './components/LinkBar';
-import MessageList from './components/MessageList';
-import WelcomeForm from './components/WelcomeForm';
-import InputForm from './components/InputForm';
-import { useChatState } from './hooks/useChatState';
+import ChatManager from '@/app/services/ChatManager';
+import LinkBar from '@/app/components/LinkBar';
+import MessageList from '@/app/components/MessageList';
+import WelcomeForm from '@/app/components/WelcomeForm';
+import InputForm from '@/app/components/InputForm';
+import { useChatState } from '@/app/hooks/useChatState';
 
 export default function Chat() {
   const {
