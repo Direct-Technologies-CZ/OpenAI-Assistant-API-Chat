@@ -1,1 +1,1 @@
-export { default as ChatManager } from './ChatManager';
+export { default as ChatManager } from '@/app/services/ChatManager';

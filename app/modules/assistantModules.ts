@@ -1,13 +1,13 @@
 // Type: Module
 // assistantModules.ts
-import { convertFileToBase64 } from '../utils/convertFileToBase64';
+import { convertFileToBase64 } from '@/app/utils/convertFileToBase64';
 import {
   uploadImageAndGetDescription,
   uploadFile,
   createAssistant,
   createThread,
   runAssistant,
-} from '../services/api';
+} from '@/app/services/api';
 
 interface AssistantDetails {
   assistantName: string;

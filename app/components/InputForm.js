@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Textarea from 'react-textarea-autosize';
-import { SendIcon, LoadingCircle, DocumentIcon, XIcon, ImageIcon } from '../icons';
+import { SendIcon, LoadingCircle, DocumentIcon, XIcon, ImageIcon } from '@/app/icons';
 
 const InputForm = ({ input, setInput, handleFormSubmit, inputRef, formRef, disabled, chatStarted, isSending, isLoading, handleChatFilesUpload, chatFileDetails, removeChatFile }) => {
   return (

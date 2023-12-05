@@ -1,6 +1,6 @@
 // hooks/useChatManager.ts
 import { useEffect, Dispatch, SetStateAction } from 'react';
-import ChatManager from '../services/ChatManager';
+import ChatManager from '@/app/services/ChatManager';
 
 export const useChatManager = (
   setChatMessages: Dispatch<SetStateAction<any[]>>, 

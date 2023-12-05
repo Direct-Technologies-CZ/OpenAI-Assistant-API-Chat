@@ -2,10 +2,10 @@
 "use client";
 
 
-import {LinkBar, MessageList, WelcomeForm, InputForm} from '../app/components';
+import {LinkBar, MessageList, WelcomeForm, InputForm} from '@/app/components';
 import {useChatState, useChatManager, useStartAssistant} from '@/app/hooks';
 
-import "../app/globals.css";
+import "@/app/globals.css";
 
 const assId = 'asst_c9T3MrMSRkMqHSSVMNJ5Exgp'
 

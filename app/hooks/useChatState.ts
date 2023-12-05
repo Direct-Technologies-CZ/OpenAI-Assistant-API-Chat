@@ -1,6 +1,6 @@
 // useChatState.ts
 import { useState, useRef } from 'react';
-import ChatManager from '../services/ChatManager';
+import ChatManager from '@/app/services/ChatManager';
 
 
 type FileDetail = {

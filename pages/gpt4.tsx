@@ -2,7 +2,7 @@
 "use client";
 
 
-import {LinkBar, MessageList, WelcomeForm, InputForm} from '../app/components';
+import { LinkBar, MessageList, WelcomeForm, InputForm } from '@/app/components';
 import {useChatState, useChatManager, useStartAssistant} from '@/app/hooks';
 
 import "../app/globals.css";

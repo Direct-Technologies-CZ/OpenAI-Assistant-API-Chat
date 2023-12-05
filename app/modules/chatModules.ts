@@ -4,7 +4,7 @@ import {
   addMessage,
   listMessages,
   checkRunStatus,
-} from '../services/api';
+} from '@/app/services/api';
 
 interface StatusData {
   status: string;

@@ -1,4 +1,4 @@
-export { default as LinkBar } from './LinkBar';
-export { default as MessageList } from './MessageList';
-export { default as WelcomeForm } from './WelcomeForm';
-export { default as InputForm } from './InputForm';
+export { default as LinkBar } from '@/app/components/LinkBar';
+export { default as MessageList } from '@/app/components/MessageList';
+export { default as WelcomeForm } from '@/app/components/WelcomeForm';
+export { default as InputForm } from '@/app/components/InputForm';

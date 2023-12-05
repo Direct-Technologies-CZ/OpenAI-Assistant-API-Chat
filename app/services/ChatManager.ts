@@ -4,13 +4,13 @@ import {
   initializeAssistant,
   createChatThread,
   runChatAssistant
-} from '../modules/assistantModules';
+} from '@/app/modules/assistantModules';
 
 import {
   submitUserMessage,
   fetchAssistantResponse,
   updateChatState
-} from '../modules/chatModules';
+} from '@/app/modules/chatModules';
 
 /**
  * Interface for the state of the chat

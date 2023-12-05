@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { Bot, User } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ImageIcon, DocumentIcon } from '../icons';
+import { ImageIcon, DocumentIcon } from '@/app/icons';
 
 // Message component to display individual messages
 const Message = ({ message, progress, isFirstMessage, fileDetails }) => {

@@ -1,7 +1,7 @@
-import "./globals.css";
+import "@/app/globals.css";
 import { Inter } from "next/font/google";
 import { ReactNode } from "react";
-import Toaster from "./toaster";
+import Toaster from "@/app/toaster";
 import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });

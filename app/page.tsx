@@ -2,8 +2,8 @@
 
 "use client";
 
-import { LinkBar, MessageList, WelcomeForm, InputForm } from './components';
-import { useChatState, useChatManager, useStartAssistant } from './hooks';
+import { LinkBar, MessageList, WelcomeForm, InputForm } from '@/app/components';
+import { useChatState, useChatManager, useStartAssistant } from '@/app/hooks';
 
 export default function Chat() {
   const {

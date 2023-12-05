@@ -1,6 +1,6 @@
 // hooks/useStartAssistant.ts
 import { useEffect } from 'react';
-import ChatManager from '../services/ChatManager';
+import ChatManager from '@/app/services/ChatManager';
 
 export const useStartAssistant = (assistantId: string | null, chatManager: ChatManager | null, initialThreadMessage: string) => {
   useEffect(() => {

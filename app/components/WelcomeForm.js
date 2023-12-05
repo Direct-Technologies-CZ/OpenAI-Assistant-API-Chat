@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
-import { LoadingCircle } from '../icons';
+import { LoadingCircle } from '@/app/icons';
 import React, { useState } from 'react';
 
 const statusToProgress = {
