@@ -1,5 +1,5 @@
 import { fetchAssistantsFromLocalStorage, getNumberOfSavedAssistants, removeAssistantFromLocalStorage } from "@/app/utils/localStorageAssistants";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 export interface StoredAssistant {
     assistantName: string;
@@ -9,11 +9,15 @@ export interface StoredAssistant {
 }
 
 
-const AssistantList = () => {
+interface AssistantListProps {
+    startChatAssistant: (assistantId: string, threadId: string) => void
+}
+
+const AssistantList: FC<AssistantListProps> = ({ startChatAssistant }) => {
     const [savedAssistants, setSavedAssistants] = useState<Array<StoredAssistant>>()
     useEffect(() => {
         setSavedAssistants(fetchAssistantsFromLocalStorage());
-    }, [savedAssistants])
+    }, [])
 
     const deleteAssistant = (assistantId: string) => {
         removeAssistantFromLocalStorage(assistantId);
@@ -25,7 +29,7 @@ const AssistantList = () => {
             <div key={assistant.assistantId} className="flex space-x-2">
                 <button
                     type="button"
-                    // onClick={() => startExistingAssistant(assistant.assistantId, assistant.threadId)}
+                    onClick={() => startChatAssistant(assistant.assistantId, assistant.threadId)}
                     className={`p-2 rounded-md flex-1 justify-center items-center relative overflow-hidden bg-green-500 text-white`}
                 >
                     {assistant.assistantName}

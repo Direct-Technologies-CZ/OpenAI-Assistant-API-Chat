@@ -7,6 +7,8 @@ import { ImageIcon, DocumentIcon } from '@/app/icons';
 
 // Message component to display individual messages
 const Message = ({ message, progress, isFirstMessage, fileDetails }) => {
+  console.log(" in message component")
+  
   return (
     <div
       className={clsx(
@@ -62,6 +64,7 @@ const Message = ({ message, progress, isFirstMessage, fileDetails }) => {
 
 // MessageList component to display a list of messages
 const MessageList = ({ chatMessages, statusMessage, isSending, progress, isFirstMessage, fileDetails }) => {
+    console.log(" in message list component")
   let messages = [...chatMessages];
 
   // Add a loading message when the site loads and isFirstMessage is true

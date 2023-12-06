@@ -120,6 +120,7 @@ export const uploadImageAndGetDescription = async (base64Image) => {
       throw new Error(`Failed to list messages: ${response.status} ${response.statusText}`);
     }
     const jsonResponse = await response.json();
+    console.log(jsonResponse)
     console.log('Messages listed successfully');
     return jsonResponse;
   };
