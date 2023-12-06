@@ -138,7 +138,7 @@ const WelcomeForm = ({
                 <button
         type="button"
         onClick={startChatAssistant}
-        disabled={isButtonDisabled || !assistantName || !assistantDescription || files.length === 0}
+        // disabled={isButtonDisabled || !assistantName || !assistantDescription || files.length === 0}
         className={`p-2 rounded-md flex justify-center items-center relative overflow-hidden ${isButtonDisabled ? 'bg-gray-500 text-gray-300' : 'bg-green-500 text-white'}`}
       >
         <div 

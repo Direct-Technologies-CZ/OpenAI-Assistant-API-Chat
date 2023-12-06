@@ -101,6 +101,13 @@ export const createChatThread = async (inputMessage: string): Promise<string> =>
   return threadData.threadId;
 };
 
+export const retrieveThread = async (threadId: string): Promise<any> => {
+  console.log("retrieving thread");
+  const data = await retrieveThread(threadId);
+  console.log(data)
+  return data
+}
+
 
 
 

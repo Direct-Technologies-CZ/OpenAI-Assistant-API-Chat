@@ -73,6 +73,25 @@ export const uploadImageAndGetDescription = async (base64Image) => {
     console.log('Thread created successfully');
     return await response.json();
   };
+
+
+  // Retrieves thread
+
+  export const retrieveThread = async (threadId) => {
+    console.log("Retrieving thread...");
+    const response = await fetch("/api/retrieveThread", {
+      method: "POST",
+         headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ assistantId, threadId }),
+    });
+     if (!response.ok) {
+      console.error('Failed to retrieve thread');
+      throw new Error('Failed to retrieve thread');
+    }
+    const data = await response.json();
+    console.log("Thread retrieved successfully", data);
+    return data;
+  }
   
   // Runs an assistant
   export const runAssistant = async (assistantId, threadId) => {
@@ -120,7 +139,9 @@ export const uploadImageAndGetDescription = async (base64Image) => {
       throw new Error(`Failed to list messages: ${response.status} ${response.statusText}`);
     }
     const jsonResponse = await response.json();
+    console.log(jsonResponse)
     console.log('Messages listed successfully');
+  
     return jsonResponse;
   };
   

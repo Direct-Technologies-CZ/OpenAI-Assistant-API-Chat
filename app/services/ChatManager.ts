@@ -11,6 +11,8 @@ import {
   fetchAssistantResponse,
   updateChatState
 } from '@/app/modules/chatModules';
+import { retrieveThread } from '@/app/services/api';
+
 
 /**
  * Interface for the state of the chat
@@ -202,7 +204,7 @@ async startAssistantWithId(assistantId: string, initialMessage: string): Promise
       // Add the assistant's response to the messages
       const newMessage = { role: 'assistant', content: assistantResponse };
       this.state.setStatusMessage('Adding messages to chat...');
-      
+      console.log(this.state)
       this.state.messages = [...this.state.messages, newMessage];
       this.state.setChatMessages(this.state.messages);
       this.state.setIsLoadingFirstMessage(false);
@@ -221,6 +223,19 @@ async startAssistantWithId(assistantId: string, initialMessage: string): Promise
     this.state.setStatusMessage('Done');
     this.state.setProgress(0);
     this.state.isLoading = false;
+  }
+}
+
+
+async getExistingAssistantWithId(assistantId: string){
+  try{
+    let threadId
+   this.state.threadId = threadId!;
+    const data = await retrieveThread(threadId);
+    console.log(data)
+  }
+  catch{
+
   }
 }
 
@@ -260,6 +275,7 @@ async sendMessage(input: string, files: File[], fileDetails: any[]): Promise<voi
       // Fetch the assistant's response
       const response = await fetchAssistantResponse(this.state.runId as string, this.state.threadId as string, this.state.setStatusMessage, this.state.setProgress,0);
       console.log('Assistant response fetched. Adding to chat state...');
+      console.log(this.state)
       
       
       // Add the assistant's response to the messages

@@ -2,9 +2,9 @@
 
 "use client";
 
-import { LinkBar, MessageList, WelcomeForm, InputForm, AllAssistants } from '@/app/components';
+import { LinkBar, MessageList, WelcomeForm, InputForm } from '@/app/components';
+import AssistandIdChat from '@/app/components/AssistantIdChat';
 import { useChatState, useChatManager, useStartAssistant } from '@/app/hooks';
-import { getNumberOfSavedAssistants, saveAssistantsToLocalStorage } from '@/app/utils/assistantsLocalStorage';
 
 export default function Chat() {
   const {
@@ -15,63 +15,40 @@ export default function Chat() {
     chatMessages, setChatMessages,
     isButtonDisabled, setIsButtonDisabled,
     files = [], setFiles,
-    threadId, setThreadId,
     isStartLoading, setStartLoading,
     statusMessage, setStatusMessage,
     isSending, setIsSending,
     inputRef,
     formRef,
-    initialThreadMessage,
+    initialThreadMessage, 
     setInitialThreadMessage,
     setChatStarted,
     chatStarted: chatHasStarted,
     chatManager, setChatManager,
     assistantId, setAssistantId,
     isMessageLoading, setIsMessageLoading,
-    progress, setProgress,
+    progress, setProgress, 
     isLoadingFirstMessage,
     setIsLoadingFirstMessage,
     chatUploadedFiles = [], setChatUploadedFiles,
     chatFileDetails, setChatFileDetails,
   } = useChatState();
 
+  
 
 
 
-  const numberOfSavedAssistants = getNumberOfSavedAssistants()
   useChatManager(setChatMessages, setStatusMessage, setChatManager, setIsMessageLoading, setProgress, setIsLoadingFirstMessage);
   useStartAssistant(assistantId, chatManager, initialThreadMessage);
 
-
-  const startChatAssistantById = async () => {
-    setIsButtonDisabled(true);
-    setStartLoading(true);
-    if (chatManager) {
-      try {
-        await chatManager.startAssistant({ assistantName, assistantModel, assistantDescription }, files, initialThreadMessage);
-        console.log('Assistant started:', chatManager.getChatState());
-        setChatStarted(true);
-      } catch (error) {
-        console.error('Error starting assistant:', error);
-        if (error instanceof Error) setStatusMessage(`Error: ${error.message}`);
-      } finally {
-        setIsButtonDisabled(false);
-        setStartLoading(false);
-      }
-    }
-  };
 
   const startChatAssistant = async () => {
     setIsButtonDisabled(true);
     setStartLoading(true);
     if (chatManager) {
       try {
-        await chatManager.startAssistant({ assistantName, assistantModel, assistantDescription }, files, initialThreadMessage);
+        await chatManager.startAssistantWithId(assistantId!, initialThreadMessage);
         console.log('Assistant started:', chatManager.getChatState());
-        const { assistantId, threadId } = chatManager.getChatState();
-        if (assistantId?.length! > 0) {
-          saveAssistantsToLocalStorage({ assistantName, assistantDescription, assistantId: assistantId!, threadId: threadId! })
-        }
         setChatStarted(true);
       } catch (error) {
         console.error('Error starting assistant:', error);
@@ -104,7 +81,7 @@ export default function Chat() {
       }
     }
   };
-
+  
   //This function takes an array of File objects (the files selected by the user) and uses the setFiles function to update the files state.
   const handleFilesChange = (selectedFiles: File[]) => setFiles(selectedFiles);
 
@@ -129,31 +106,20 @@ export default function Chat() {
   const removeChatFile = (fileName: string) => {
     const updatedFileDetails = chatFileDetails.filter((file) => file.name !== fileName);
     setChatFileDetails(updatedFileDetails);
-
+  
     const updatedUploadedFiles = chatUploadedFiles.filter((file) => file.name !== fileName);
     setChatUploadedFiles(updatedUploadedFiles);
   };
 
-
   return (
-    <div className="flex">
-      {numberOfSavedAssistants >= 1 && <aside className="min-w-[200px] bg-gray-200">
-        {/* Include the AllAssistants component here so that it appears inside the sidebar */}
-        <AllAssistants {...{ setStatusMessage, assistantName, setStartLoading, setAssistantName, setThreadId, assistantDescription, setAssistantDescription, assistantModel, setAssistantModel, files, handleFilesChange, startChatAssistantById, isButtonDisabled, isStartLoading, statusMessage, startChatAssistant, setAssistantId, chatManager }} />
-      </aside>}
-      <main className="flex-1 flex-col items-center justify-between pb-40 bg-space-grey-light">
-        <LinkBar />
-        {chatHasStarted || assistantId || isLoadingFirstMessage ? (
-          <MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending} progress={progress} isFirstMessage={isLoadingFirstMessage} fileDetails={chatFileDetails} />
-        ) : (
-          <div>
-            <WelcomeForm {...{ assistantName, setAssistantName, assistantDescription, setAssistantDescription, assistantModel, setAssistantModel, files, handleFilesChange, startChatAssistant, isButtonDisabled, isStartLoading, statusMessage }} />
-          </div>
-        )}
-        <InputForm {...{ input: inputmessage, setInput: setInputmessage, handleFormSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading, handleChatFilesUpload, chatFileDetails, removeChatFile }} />
-      </main>
-    </div>
+    <main className="flex flex-col items-center justify-between pb-40 bg-space-grey-light">
+      <LinkBar />
+      {chatHasStarted || isLoadingFirstMessage  ? (
+        <MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending} progress={progress} isFirstMessage={isLoadingFirstMessage} fileDetails={chatFileDetails} />
+      ) : (
+        <AssistandIdChat {...{assistantId, setAssistantId, assistantName, setAssistantName, assistantDescription, setAssistantDescription, assistantModel, setAssistantModel, files, handleFilesChange, startChatAssistant, isButtonDisabled, isStartLoading, statusMessage}} />
+      )}
+      <InputForm {...{input: inputmessage, setInput: setInputmessage, handleFormSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading, handleChatFilesUpload, chatFileDetails, removeChatFile}} />
+    </main>
   );
 }
-
-
