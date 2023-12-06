@@ -88,7 +88,7 @@ const WelcomeForm = ({
               //just delete the disabled prop to enable GPT4
               //disabled GPT4 because its expensive in the Demo
               disabled={process.env.NEXT_PUBLIC_DEMO_MODE === 'true'}
-              //######################################
+            //######################################
             >
               GPT-4
             </button>
@@ -110,57 +110,57 @@ const WelcomeForm = ({
               }
             }}
           >
-      <input
-        id="file-input"
-        type="file"
-        accept=".c,.cpp,.csv,.docx,.html,.java,.json,.md,.pdf,.pptx,.txt,.tex,image/jpeg,image/png"
-        onChange={(e) => {
-          if (e.target.files) {
-            handleFilesChange(Array.from(e.target.files));
-          }
-        }}
-        required
-        style={{ display: 'none' }}
-        multiple
-      />
-      {files.length > 0 ? (
-        <>
-          <FontAwesomeIcon icon={faFileUpload} className="text-green-500 mb-2" />
-          {files.map((file, index) => (
-            <p key={index} className="text-gray-700 text-lg font-bold">{file.name}</p>
-          ))}
-        </>
-      ) : (
-        <p className="text-gray-500">Select a File</p>
-      )}
-                </div>
+            <input
+              id="file-input"
+              type="file"
+              accept=".c,.cpp,.csv,.docx,.html,.java,.json,.md,.pdf,.pptx,.txt,.tex,image/jpeg,image/png"
+              onChange={(e) => {
+                if (e.target.files) {
+                  handleFilesChange(Array.from(e.target.files));
+                }
+              }}
+              required
+              style={{ display: 'none' }}
+              multiple
+            />
+            {files.length > 0 ? (
+              <>
+                <FontAwesomeIcon icon={faFileUpload} className="text-green-500 mb-2" />
+                {files.map((file, index) => (
+                  <p key={index} className="text-gray-700 text-lg font-bold">{file.name}</p>
+                ))}
+              </>
+            ) : (
+              <p className="text-gray-500">Select a File</p>
+            )}
+          </div>
 
-                <button
-        type="button"
-        onClick={startChatAssistant}
-        disabled={isButtonDisabled || !assistantName || !assistantDescription || files.length === 0}
-        className={`p-2 rounded-md flex justify-center items-center relative overflow-hidden ${isButtonDisabled ? 'bg-gray-500 text-gray-300' : 'bg-green-500 text-white'}`}
-      >
-        <div 
-          style={{ 
-            position: 'absolute', 
-            left: 0, 
-            top: 0, 
-            height: '100%', 
-            width: `${progress}%`, 
-            background: 'rgba(0, 0, 0, 0.2)' 
-          }} 
-        />
-        {isStartLoading ? (
-          <div className="flex flex-col items-center space-y-2">
-            <LoadingCircle />
-            <p className="text-sm text-gray-700">{statusMessage}</p>
-          </div>
-        ) : "Start"}
-      </button>
-              </form>
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={startChatAssistant}
+            // disabled={isButtonDisabled || !assistantName || !assistantDescription || files.length === 0}
+            className={`p-2 rounded-md flex justify-center items-center relative overflow-hidden ${isButtonDisabled ? 'bg-gray-500 text-gray-300' : 'bg-green-500 text-white'}`}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                height: '100%',
+                width: `${progress}%`,
+                background: 'rgba(0, 0, 0, 0.2)'
+              }}
+            />
+            {isStartLoading ? (
+              <div className="flex flex-col items-center space-y-2">
+                <LoadingCircle />
+                <p className="text-sm text-gray-700">{statusMessage}</p>
+              </div>
+            ) : "Start"}
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 

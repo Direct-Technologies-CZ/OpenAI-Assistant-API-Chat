@@ -4,6 +4,7 @@
 
 import { LinkBar, MessageList, WelcomeForm, InputForm } from '@/app/components';
 import { useChatState, useChatManager, useStartAssistant } from '@/app/hooks';
+import { saveAssistantsToLocalStorage } from '@/app/utils/localStorageAssistants';
 
 export default function Chat() {
   const {
@@ -49,6 +50,8 @@ export default function Chat() {
         await chatManager.startAssistant({ assistantName, assistantModel, assistantDescription }, files, initialThreadMessage);
         console.log('Assistant started:', chatManager.getChatState());
         setChatStarted(true);
+        const { assistantId, threadId } = chatManager.getChatState()
+        saveAssistantsToLocalStorage({assistantName, assistantDescription, assistantId: assistantId!, threadId: threadId!})
       } catch (error) {
         console.error('Error starting assistant:', error);
         if (error instanceof Error) setStatusMessage(`Error: ${error.message}`);
