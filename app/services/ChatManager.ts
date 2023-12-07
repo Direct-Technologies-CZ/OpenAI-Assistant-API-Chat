@@ -11,6 +11,7 @@ import {
   fetchAssistantResponse,
   updateChatState
 } from '@/app/modules/chatModules';
+import { listMessages } from '@/app/services/api';
 
 /**
  * Interface for the state of the chat
@@ -224,6 +225,64 @@ async startAssistantWithId(assistantId: string, initialMessage: string): Promise
   }
 }
 
+// Method to resume an existing thread with an assistant with a given thread ID and assistant ID
+  async resumeExistingAssistantThread(assistantId: string | null, threadId: string | null): Promise<void> {
+    console.log("Resuming conversation with assistant.");
+
+    // set states for threadId and assistantId
+    this.state.threadId = threadId
+    this.state.assistantId = assistantId
+    this.state.isLoading = true;
+    
+    try {
+    console.log("fetching RunId")
+    this.state.setProgress(10); // Set
+
+    // Fetch the runId
+    const runId = await runChatAssistant(this.state.assistantId!, this.state.threadId!);
+    if (runId === null) {
+      throw new Error('RunId is null');
+    }
+
+    this.state.runId = runId; 
+    this.state.setStatusMessage('Received Run_ID..');
+    this.state.setProgress(40); // Set progress to 40%
+
+    // Fetch the thread messages
+    if (this.state.runId && this.state.threadId) {
+      this.state.setStatusMessage('checking status...');
+      
+
+      
+      this.state.setStatusMessage('Run complete...');
+      const response = await listMessages(threadId, runId);
+      if(response.ok){
+        this.state.messages = response.messages
+      }
+      this.state.setChatMessages(this.state.messages);
+
+      console.log(this.state.messages)
+      console.log("RAW RESPONSE FROM LISTMESSAGES")
+      this.state.setIsLoadingFirstMessage(false);
+
+      } else {
+        console.error('RunId or ThreadId is null. Current state:', this.state);
+      }
+  
+    } catch (error) {
+      // Handle any errors
+      this.state.error = error as Error;
+      this.state.setStatusMessage(`Error: ${this.state.error.message}`);
+      console.error('Error in starting assistant:', error);
+    } finally {
+      // Finalize the operation
+      this.state.setStatusMessage('Done');
+      this.state.isLoading = false;
+    }
+  }
+
+
+
 // Method to send a message
 async sendMessage(input: string, files: File[], fileDetails: any[]): Promise<void> { // Add a new parameter for the files
   console.log('Sending message...');
@@ -254,10 +313,12 @@ async sendMessage(input: string, files: File[], fileDetails: any[]): Promise<voi
       console.log('User message submitted. Running assistant...');
       
       // Run the assistant
+
       this.state.runId = await runChatAssistant(this.state.assistantId as string, this.state.threadId as string);
-      console.log('Assistant run successfully. Fetching assistant response...');
-      
+      console.log('Assistant run successfully. Fetching assistant response...');  
+
       // Fetch the assistant's response
+      console.log("getting assistant response from sendMessage component")
       const response = await fetchAssistantResponse(this.state.runId as string, this.state.threadId as string, this.state.setStatusMessage, this.state.setProgress,0);
       console.log('Assistant response fetched. Adding to chat state...');
       

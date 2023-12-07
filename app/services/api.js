@@ -123,6 +123,23 @@ export const uploadImageAndGetDescription = async (base64Image) => {
     console.log('Messages listed successfully');
     return jsonResponse;
   };
+
+  // Fetches assistant response message 
+    export const getAssistantResponse = async (threadId, runId) => {
+    console.log('Listing messages...');
+    const response = await fetch('/api/getAssistantResponse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ threadId, runId }),
+    });
+    if (!response.ok) {
+      console.error(`Error fetching assistant response: ${response.status} ${response.statusText}`);
+      throw new Error(`Failed to fetch assistant response: ${response.status} ${response.statusText}`);
+    }
+    const jsonResponse = await response.json();
+    console.log('Response fetched successfully');
+    return jsonResponse;
+  };
   
   // Adds a message
   export const addMessage = async (data) => {

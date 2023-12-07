@@ -4,6 +4,7 @@ import {
   addMessage,
   listMessages,
   checkRunStatus,
+  getAssistantResponse,
 } from '@/app/services/api';
 
 interface StatusData {
@@ -59,7 +60,7 @@ export const fetchAssistantResponse = async (runId: string, threadId: string, se
     } while (status !== 'completed');
     setStatusMessage('Assistant response fetched successfully.');
     setProgress(100); // Set progress to 100% after completion
-    const response = await listMessages(threadId, runId);
+    const response = await getAssistantResponse(threadId, runId);
     return response.messages;
   } catch (error) {
     setProgress(0); // Reset progress in case of error

@@ -1,9 +1,19 @@
-// MessageList.js
+// MessageList.tsx
 import clsx from "clsx";
 import { Bot, User } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ImageIcon, DocumentIcon } from '@/app/icons';
+
+
+export interface Message {
+  content?: string;
+  role?: string;
+  fileDetails?: Array<any>;
+  statusMessage?: string;
+  isLoading?: boolean;
+}
+
 
 // Message component to display individual messages
 const Message = ({ message, progress, isFirstMessage, fileDetails }) => {
@@ -63,6 +73,9 @@ const Message = ({ message, progress, isFirstMessage, fileDetails }) => {
 // MessageList component to display a list of messages
 const MessageList = ({ chatMessages, statusMessage, isSending, progress, isFirstMessage, fileDetails }) => {
   let messages = [...chatMessages];
+
+  console.log(messages)
+  console.log("messages in messages component above, look for this format!")
 
   // Add a loading message when the site loads and isFirstMessage is true
   if (isFirstMessage && messages.length === 0) {

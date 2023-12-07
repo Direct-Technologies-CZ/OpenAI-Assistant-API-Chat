@@ -55,7 +55,7 @@ const WelcomeForm = ({
     setLastProgress(progress);
   }
   return (
-    <div className="border-gray-500 bg-gray-200 sm:mx-0 mx-5 mt-20 max-w-screen-md rounded-md border-2 sm:w-full">
+    <div className="border-gray-500 bg-gray-200 sm:mx-0 mx-5 mt-36 max-w-screen-md rounded-md border-2 sm:w-full">
       <div className="flex flex-col space-y-4 p-7 sm:p-10">
         <h1 className="text-lg font-semibold text-black">
           Welcome to Agent42!
