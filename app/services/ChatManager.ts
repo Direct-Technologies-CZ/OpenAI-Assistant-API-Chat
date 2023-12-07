@@ -11,7 +11,6 @@ import {
   fetchAssistantResponse,
   updateChatState
 } from '@/app/modules/chatModules';
-import { listMessages } from '@/app/services/api';
 
 /**
  * Interface for the state of the chat
@@ -205,75 +204,6 @@ async startAssistantWithId(assistantId: string, initialMessage: string): Promise
       this.state.setStatusMessage('Adding messages to chat...');
       
       this.state.messages = [...this.state.messages, newMessage];
-      this.state.setChatMessages(this.state.messages);
-      this.state.setIsLoadingFirstMessage(false);
-      //this.state.setProgress(0);
-
-    } else {
-      console.error('RunId or ThreadId is null. Current state:', this.state);
-    }
-  } catch (error) {
-    // Handle any errors
-    this.state.setStatusMessage('Error!');
-    this.state.error = error as Error;
-    console.error('Error in starting assistant:', error);
-  } finally {
-    // Finalize the operation
-    this.state.setStatusMessage('Done');
-    this.state.setProgress(0);
-    this.state.isLoading = false;
-  }
-}
-
-
-// Method to resume a given assistant thread 
-async resumeAssistantConversation(assistantId: string, threadId: string): Promise<void> {
-  try {
-    console.log(assistantId)
-    console.log(threadId)
-    this.state.setIsLoadingFirstMessage(true);
-    // 
-    this.state.setStatusMessage('Fetching thread...');
-    this.state.setProgress(10); // Set progress to 10%
-    this.state.assistantId = assistantId;
-
-    if (threadId === null) {
-      throw new Error('ThreadId is null');
-    }
-    this.state.setStatusMessage('Received thread_ID...');
-    this.state.setProgress(20); // Set progress to 20%
-
-    // Run the assistant
-    this.state.setStatusMessage('Running assistant...');
-    this.state.setProgress(30); // Set progress to 30%
-    this.state.threadId = threadId;
-    const runId = await runChatAssistant(this.state.assistantId, this.state.threadId);
-    if (runId === null) {
-      throw new Error('RunId is null');
-    }
-
-    this.state.runId = runId; 
-    this.state.setStatusMessage('Received Run_ID..');
-    this.state.setProgress(40); // Set progress to 40%
-
-    // Fetch the assistant's response
-    if (this.state.runId && this.state.threadId) {
-      const runId = this.state.runId as string;
-      const threadId = this.state.threadId as string;
-      this.state.setStatusMessage('checking status...');
-
-    const response = await listMessages(threadId, runId);
-      console.log("aa")
-        console.log(response.messages)
-    this.state.messages = response.messages
-      
-      this.state.setStatusMessage('Run complete...');
-      this.state.assistantResponseReceived = true;
-      this.state.setStatusMessage('Received messages...');
-      
-      // Add the assistant's response to the messages
-  
-
       this.state.setChatMessages(this.state.messages);
       this.state.setIsLoadingFirstMessage(false);
       //this.state.setProgress(0);

@@ -31,18 +31,10 @@ export async function POST(req: NextRequest) {
 
     // Retrieve messages for the given thread ID using the OpenAI API
     const messages = await openai.beta.threads.messages.list(threadId);
-       const formattedMessages = messages.data.map((message, index) => {
-      return {role: message.role, content: message.content.at(0).text.value}
-    })
-
-    console.log(`formatted Messages`)
-    console.log(formattedMessages)
-    // messages.data.forEach((message, index) => {
-    //   console.log(`Message ${index + 1} content:`, message.content);
-    //   console.log(message.role)
-    // });
-
-
+    
+    messages.data.forEach((message, index) => {
+      console.log(`Message ${index + 1} content:`, message.content);
+    });
     // Log the count of retrieved messages for debugging
     console.log(`Retrieved ${messages.data.length} messages`);
 
@@ -63,7 +55,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Assistant message is not text, only text supported in this demo" });
     }
     // Return the retrieved messages as a JSON response
-    return NextResponse.json({ ok: true, messages: formattedMessages});
+    return NextResponse.json({ ok: true, messages: assistantMessageContent.text.value });
   } catch (error) {
     // Log any errors that occur during the process
     console.error(`Error occurred: ${error}`);
