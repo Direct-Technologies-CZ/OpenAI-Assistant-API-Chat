@@ -77,6 +77,8 @@ export const uploadImageAndGetDescription = async (base64Image) => {
   // Runs an assistant
   export const runAssistant = async (assistantId, threadId) => {
     console.log('Running assistant...');
+    console.log(assistantId)
+    console.log(threadId)
     const response = await fetch('/api/runAssistant', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -89,6 +91,25 @@ export const uploadImageAndGetDescription = async (base64Image) => {
     const data = await response.json();
     console.log('Assistant run successfully. Run ID:', data.runId);
     return data;
+  };
+
+
+  // Cancels run
+    export const cancelOngoingRun = async (assistantId, runId) => {
+    console.log('Running assistant...');
+    console.log(assistantId)
+    
+    const response = await fetch('/api/cancelRun', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ assistantId, runId }),
+    });
+    if (!response.ok) {
+      console.error('Failed to cancel run');
+      throw new Error('Failed to cancel run');
+    }
+  
+    console.log("run canceled successfully")
   };
   
   // Checks the status of a run
