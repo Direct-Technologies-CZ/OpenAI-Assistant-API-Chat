@@ -12,7 +12,7 @@ export interface MessageListProps {
   isSending?: boolean;
   progress?: any;
   isFirstMessage?: boolean;
-
+  fileDetails?: any[]
 }
 
 
@@ -87,7 +87,7 @@ const Message: FC<MessageProps> = ({ message, progress, isFirstMessage, fileDeta
 };
 
 // MessageList component to display a list of messages
-const MessageList: FC<MessageListProps> = ({ chatMessages, statusMessage, isSending, progress, isFirstMessage}) => {
+const MessageList: FC<MessageListProps> = ({ chatMessages, statusMessage, isSending, progress, isFirstMessage, fileDetails}) => {
   let messages = [...chatMessages!];
 
   // Add a loading message when the site loads and isFirstMessage is true
