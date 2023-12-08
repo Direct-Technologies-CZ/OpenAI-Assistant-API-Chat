@@ -1,3 +1,4 @@
+import { listAssistants } from "@/app/services/api";
 import { clearAssistantThreadFromLocalStorage, fetchAssistantsFromLocalStorage, removeAssistantFromLocalStorage } from "@/app/utils/localStorageAssistants";
 import { FC, useEffect, useState } from "react";
 
@@ -16,6 +17,11 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
     const [savedAssistants, setSavedAssistants] = useState<StoredAssistant[]>([]);
 
     useEffect(() => {
+        const fetchAssistantList = async () => {
+            await listAssistants();
+        }
+
+        console.log(fetchAssistantList())
         setSavedAssistants(fetchAssistantsFromLocalStorage());
         
     }, []);

@@ -127,6 +127,23 @@ export const uploadImageAndGetDescription = async (base64Image) => {
     console.log('Run status checked successfully');
     return await response.json();
   };
+
+  // Lists assistants
+  export const listAssistants = async () => {
+    console.log('Listing assistants...');
+    const response = await fetch('/api/listAssistants', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    if (!response.ok) {
+      console.error(`Error fetching assistants: ${response.status} ${response.statusText}`);
+      throw new Error(`Failed to list assistants: ${response.status} ${response.statusText}`);
+    }
+    const jsonResponse = await response.json();
+    console.log(jsonResponse)
+    console.log('Assistants listed successfully');
+    return jsonResponse;
+  };
   
   // Lists messages
   export const listMessages = async (threadId, runId) => {
