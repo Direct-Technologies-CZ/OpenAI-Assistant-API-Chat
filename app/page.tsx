@@ -122,7 +122,7 @@ export default function Chat() {
       {chatHasStarted || assistantId || isLoadingFirstMessage  ? (
         <MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending} progress={progress} isFirstMessage={isLoadingFirstMessage} fileDetails={chatFileDetails} />
       ) : (
-        <WelcomeForm {...{assistantName, setAssistantName, assistantDescription, setAssistantDescription, assistantModel, setAssistantModel, files, handleFilesChange, startChatAssistant, isButtonDisabled, isStartLoading, statusMessage}} />
+        <WelcomeForm {...{assistantName, setAssistantName, assistantDescription, setAssistantDescription, assistantModel, setAssistantModel, files, handleFilesChange, startChatAssistant, isButtonDisabled, isStartLoading, statusMessage, setInitialThreadMessage, initialThreadMessage}} />
       )}
       <InputForm {...{input: inputmessage, setInput: setInputmessage, handleFormSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading, handleChatFilesUpload, chatFileDetails, removeChatFile}} />
     </main>

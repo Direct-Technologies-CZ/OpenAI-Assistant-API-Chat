@@ -95,14 +95,14 @@ export const uploadImageAndGetDescription = async (base64Image) => {
 
 
   // Cancels run
-    export const cancelOngoingRun = async (assistantId, runId) => {
+    export const cancelOngoingRun = async (threadId, runId) => {
     console.log('Running assistant...');
-    console.log(assistantId)
+    console.log(threadId)
     
     const response = await fetch('/api/cancelRun', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ assistantId, runId }),
+      body: JSON.stringify({ threadId, runId }),
     });
     if (!response.ok) {
       console.error('Failed to cancel run');
@@ -142,6 +142,23 @@ export const uploadImageAndGetDescription = async (base64Image) => {
     }
     const jsonResponse = await response.json();
     console.log('Messages listed successfully');
+    return jsonResponse;
+  };
+
+  // Lists runs in a thread
+  export const listRuns = async (threadId) => {
+    console.log('Listing runs...');
+    const response = await fetch('/api/listRuns', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ threadId }),
+    });
+    if (!response.ok) {
+      console.error(`Error fetching runs: ${response.status} ${response.statusText}`);
+      throw new Error(`Failed to list runs: ${response.status} ${response.statusText}`);
+    }
+    const jsonResponse = await response.json();
+    console.log('Runs listed successfully');
     return jsonResponse;
   };
 

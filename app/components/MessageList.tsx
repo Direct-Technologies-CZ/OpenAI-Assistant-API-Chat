@@ -74,9 +74,6 @@ const Message = ({ message, progress, isFirstMessage, fileDetails }) => {
 const MessageList = ({ chatMessages, statusMessage, isSending, progress, isFirstMessage, fileDetails }) => {
   let messages = [...chatMessages];
 
-  console.log(messages)
-  console.log("messages in messages component above, look for this format!")
-
   // Add a loading message when the site loads and isFirstMessage is true
   if (isFirstMessage && messages.length === 0) {
     messages.push({

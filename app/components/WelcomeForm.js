@@ -29,6 +29,7 @@ const statusToProgress = {
   'Done': 115,
 };
 
+
 const WelcomeForm = ({
   assistantName,
   setAssistantName,
@@ -36,6 +37,8 @@ const WelcomeForm = ({
   setAssistantDescription,
   assistantModel,
   setAssistantModel,
+  setInitialThreadMessage,
+  initialThreadMessage,
   files,
   handleFilesChange,
   startChatAssistant,
@@ -47,13 +50,12 @@ const WelcomeForm = ({
   const baseStatusMessage = statusMessage.replace(/ \(\d+ seconds elapsed\)$/, '');
   let progress = statusToProgress[baseStatusMessage] || 0;
 
-  // If the current progress is 0 and the last progress is not 0,
-  // use the last progress value
   if (progress === 0 && lastProgress !== 0) {
     progress = lastProgress;
   } else if (progress !== lastProgress) {
     setLastProgress(progress);
   }
+
   return (
     <div className="border-gray-500 bg-gray-200 sm:mx-0 mx-5 mt-36 max-w-screen-md rounded-md border-2 sm:w-full">
       <div className="flex flex-col space-y-4 p-7 sm:p-10">
@@ -79,7 +81,18 @@ const WelcomeForm = ({
             className="p-2 border border-gray-200 rounded-md"
           />
 
-          <div>
+          {/* Existing buttons and inputs remain unchanged */}
+
+          {/* Text area for setting initialThreadMessage */}
+          <textarea
+            placeholder="Status Message"
+            value={initialThreadMessage}
+            onChange={(e) => setInitialThreadMessage(e.target.value)}
+            required
+            className="p-2 border border-gray-200 rounded-md"
+          />
+
+                    <div>
             <button
               type="button"
               onClick={() => setAssistantModel('gpt-4-1106-preview')}

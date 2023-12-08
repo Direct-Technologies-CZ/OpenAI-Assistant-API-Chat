@@ -11,7 +11,7 @@ import {
   fetchAssistantResponse,
   updateChatState
 } from '@/app/modules/chatModules';
-import { listMessages } from '@/app/services/api';
+import { cancelOngoingRun, listMessages, listRuns } from '@/app/services/api';
 
 /**
  * Interface for the state of the chat
@@ -180,10 +180,12 @@ async startAssistantWithId(assistantId: string, initialMessage: string): Promise
     this.state.setStatusMessage('Running assistant...');
     this.state.setProgress(30); // Set progress to 30%
     this.state.threadId = threadId;
+
     const runId = await runChatAssistant(this.state.assistantId, this.state.threadId);
     if (runId === null) {
       throw new Error('RunId is null');
     }
+    
 
     this.state.runId = runId; 
     this.state.setStatusMessage('Received Run_ID..');
@@ -225,6 +227,17 @@ async startAssistantWithId(assistantId: string, initialMessage: string): Promise
   }
 }
 
+
+async listAndCancelOngoingRun(threadId: string | null){
+    console.log("checking if there isn't any active run")
+    const response = await listRuns(threadId)
+    if(response.runs[0].status === "in_progress"){
+      console.log("found active run, canceling...")
+      cancelOngoingRun(threadId, response.runs[0].id)
+      console.log("run canceled")
+    }
+}
+
 // Method to resume an existing thread with an assistant with a given thread ID and assistant ID
   async resumeExistingAssistantThread(assistantId: string | null, threadId: string | null): Promise<void> {
     console.log("Resuming conversation with assistant.");
@@ -235,34 +248,29 @@ async startAssistantWithId(assistantId: string, initialMessage: string): Promise
     this.state.isLoading = true;
     
     try {
-    console.log("fetching RunId")
-    this.state.setProgress(10); // Set
+    // Fetch the runId from list of runs, this is to make sure we don't clash with an active run
+    this.state.setStatusMessage("Fetching RunId")
+    this.state.setProgress(10);
+    const response = await listRuns(this.state.threadId);
 
-    // Fetch the runId
-    const runId = await runChatAssistant(this.state.assistantId!, this.state.threadId!);
-    if (runId === null) {
-      throw new Error('RunId is null');
-    }
-
+    // Pick the latest run for the current messages
+    const runId = response.runs[0].id
     this.state.runId = runId; 
+    this.state.setProgress(20)
     this.state.setStatusMessage('Received Run_ID..');
     this.state.setProgress(40); // Set progress to 40%
 
     // Fetch the thread messages
     if (this.state.runId && this.state.threadId) {
-      this.state.setStatusMessage('checking status...');
-      
-
-      
-      this.state.setStatusMessage('Run complete...');
+      this.state.setStatusMessage("Fetching messages...")
+      this.state.setProgress(50);
       const response = await listMessages(threadId, runId);
       if(response.ok){
         this.state.messages = response.messages
       }
       this.state.setChatMessages(this.state.messages);
-
-      console.log(this.state.messages)
-      console.log("RAW RESPONSE FROM LISTMESSAGES")
+      this.state.setStatusMessage("Messages set!")
+      this.state.setProgress(70);
       this.state.setIsLoadingFirstMessage(false);
 
       } else {
