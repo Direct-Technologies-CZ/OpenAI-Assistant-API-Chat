@@ -12,6 +12,7 @@ import { useStartAssistant } from "@/app/hooks/useStartAssistant";
 import LinkBar from "@/app/components/LinkBar";
 import { InputForm, MessageList } from "@/app/components";
 import { addAssistantThreadToLocalStorage, saveAssistantsToLocalStorage } from "@/app/utils/localStorageAssistants";
+import AssistantList2 from "@/app/components/AssistantList2";
 
 
 
@@ -143,7 +144,7 @@ const StoredAssistantsPage: NextPage = () => {
             {chatHasStarted || assistantId || isLoadingFirstMessage ? (
                 <><MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending} progress={progress} isFirstMessage={isLoadingFirstMessage} fileDetails={chatFileDetails} /><InputForm {...{ input: inputmessage, setInput: setInputmessage, handleFormSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading, handleChatFilesUpload, chatFileDetails, removeChatFile }} /></>
             ) : (
-                <><AssistantList startExistingAssistant={startExistingAssistant} /></>
+                <><AssistantList2 startExistingAssistant={startExistingAssistant} /></>
             )}
 
 
