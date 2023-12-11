@@ -13,6 +13,7 @@ import LinkBar from "@/app/components/LinkBar";
 import { InputForm, MessageList } from "@/app/components";
 import { addAssistantThreadToLocalStorage, saveAssistantsToLocalStorage } from "@/app/utils/localStorageAssistants";
 import AssistantList2 from "@/app/components/AssistantList2";
+import { useState } from "react";
 
 
 
@@ -45,6 +46,7 @@ const StoredAssistantsPage: NextPage = () => {
         chatFileDetails, setChatFileDetails,
     } = useChatState();
 
+    const [showFromLocalStorage, setShowFromLocalStorage] = useState(true);
 
     useChatManager(setChatMessages, setStatusMessage, setChatManager, setIsMessageLoading, setProgress, setIsLoadingFirstMessage);
 
@@ -136,20 +138,42 @@ const StoredAssistantsPage: NextPage = () => {
     return (
         <>
 
-      
-  
-        
-        <main className="flex flex-col items-center justify-between pb-40">
-      <LinkBar />
-            {chatHasStarted || assistantId || isLoadingFirstMessage ? (
-                <><MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending} progress={progress} isFirstMessage={isLoadingFirstMessage} fileDetails={chatFileDetails} /><InputForm {...{ input: inputmessage, setInput: setInputmessage, handleFormSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading, handleChatFilesUpload, chatFileDetails, removeChatFile }} /></>
-            ) : (
-                <><AssistantList2 startExistingAssistant={startExistingAssistant} /></>
-            )}
 
 
 
-        </main></>
+            <main className="flex flex-col items-center justify-between pb-40">
+                <LinkBar />
+                 <div className="flex justify-center items-center py-2 w-full max-w-xs mx-auto">
+                    <div className="flex items-center justify-between w-full">
+                        <span className={`font-medium ${showFromLocalStorage ? 'text-green-600 font-bold' : 'text-gray-500 font-light'}`}>Local Storage</span>
+                        <label htmlFor="toggle-assistants" className="flex items-center cursor-pointer">
+                            <div className="relative">
+                                <input
+                                    type="checkbox"
+                                    id="toggle-assistants"
+                                    className="sr-only"
+                                    onChange={() => setShowFromLocalStorage(!showFromLocalStorage)}
+                                    checked={showFromLocalStorage}
+                                />
+                                <div className="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                <div
+                                    className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform
+                                                ${showFromLocalStorage ? 'translate-x-0' : 'translate-x-6'}`}
+                                ></div>
+                            </div>
+                        </label>
+                        <span className={`font-medium ${showFromLocalStorage ? 'text-gray-500 font-light' : 'text-green-600 font-bold'}`}>API</span>
+                    </div>
+                </div>
+                {chatHasStarted || assistantId || isLoadingFirstMessage ? (
+                    <><MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending} progress={progress} isFirstMessage={isLoadingFirstMessage} fileDetails={chatFileDetails} /><InputForm {...{ input: inputmessage, setInput: setInputmessage, handleFormSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading, handleChatFilesUpload, chatFileDetails, removeChatFile }} /></>
+                ) : (
+                    <>{showFromLocalStorage ? <AssistantList startExistingAssistant={startExistingAssistant} /> : <AssistantList2 startExistingAssistant={startExistingAssistant} />}</>
+                )}
+
+
+
+            </main></>
     );
 }
 
