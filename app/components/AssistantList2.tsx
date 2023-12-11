@@ -207,6 +207,7 @@ const AssistantList2: FC<AssistantListProps> = ({ startExistingAssistant }) => {
         // Load assistants and set initial state
         setSavedAssistants(fetchAssistantsFromLocalStorage());
 
+
         // set random assistant list for testing pagination purposes
         // setSavedAssistants(randomAssistantList);
     }, []);

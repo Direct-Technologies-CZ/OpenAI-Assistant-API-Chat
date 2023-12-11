@@ -168,7 +168,7 @@ const StoredAssistantsPage: NextPage = () => {
                 {chatHasStarted || assistantId || isLoadingFirstMessage ? (
                     <><MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending} progress={progress} isFirstMessage={isLoadingFirstMessage} fileDetails={chatFileDetails} /><InputForm {...{ input: inputmessage, setInput: setInputmessage, handleFormSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading, handleChatFilesUpload, chatFileDetails, removeChatFile }} /></>
                 ) : (
-                    <>{showFromLocalStorage ? <AssistantList startExistingAssistant={startExistingAssistant} /> : <AssistantList2 startExistingAssistant={startExistingAssistant} />}</>
+                    <>{showFromLocalStorage ? <AssistantList2 startExistingAssistant={startExistingAssistant} /> : <AssistantList startExistingAssistant={startExistingAssistant} />}</>
                 )}
 
 
