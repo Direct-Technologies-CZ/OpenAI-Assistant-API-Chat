@@ -25,6 +25,14 @@ interface AssistantListProps {
 const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
     const [savedAssistants, setSavedAssistants] = useState<StoredAssistant[]>([]);
     const [allSavedAssistants, setAllSavedAssistants] = useState<StoredAssistant[]>([]);
+   const [shownInstructions, setShownInstructions] = useState<Record<string, boolean>>({});
+
+    const toggleInstructions = (index: number) => {
+        setShownInstructions(prev => ({
+            ...prev,
+            [index]: !prev[index]
+        }));
+    };
 
     const [currentPage, setCurrentPage] = useState(0);
     // can change from 1-100
@@ -106,9 +114,19 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
                         <tr key={index}>
                             <td className="px-6 py-4 whitespace-nowrap">{assistant.name}</td>
                               <td className="px-6 py-4" style={{ maxWidth: "250px" }}> {/* Set a maximum width */}
-                        <div className={"whitespace-normal overflow-auto"}> {/* Enable text wrapping and scrolling if needed */}
-                            {assistant.instructions}
-                        </div>
+                               <td className="px-6 py-4">
+                                {shownInstructions[index] ? (
+                                    <div className="overflow-auto cursor-pointer" onClick={() => toggleInstructions(index)}>
+                                        {assistant.instructions}
+                                    </div>
+                                ) : (
+                                    <div className="overflow-hidden whitespace-nowrap cursor-pointer underline" 
+                                         onClick={() => toggleInstructions(index)} 
+                                         style={{ maxWidth: "250px" }}>
+                                        {assistant.instructions}
+                                    </div>
+                                )}
+                            </td>
                     </td>
                             <td className="px-6 py-4 whitespace-nowrap">{assistant.threadId ? "YES" : "NO"}</td>
                             <td className="px-6 py-4 whitespace-nowrap">

@@ -117,7 +117,7 @@ const StoredAssistantsPage: NextPage = () => {
             }
         } else if (chatManager) {
             try {
-                await chatManager.startAssistantWithId(assistantId!, "x");
+                await chatManager.startAssistantWithId(assistantId!, "say hi to user!");
                 console.log('Assistant started:', chatManager.getChatState());
                 const { threadId } = chatManager.getChatState()
                 addAssistantThreadToLocalStorage(assistantId!, threadId!)
