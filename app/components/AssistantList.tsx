@@ -1,5 +1,5 @@
 import { listAssistants } from "@/app/services/api";
-import { clearAssistantThreadFromLocalStorage, fetchAssistantsFromLocalStorage, removeAssistantFromLocalStorage } from "@/app/utils/localStorageAssistants";
+import { clearAssistantThreadFromLocalStorage, fetchAssistantThreadsFromLocalStorage, fetchAssistantsFromLocalStorage, removeAssistantFromLocalStorage } from "@/app/utils/localStorageAssistants";
 import { FC, useEffect, useState } from "react";
 
 export interface StoredAssistant {
@@ -25,10 +25,13 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
     const fetchInitialAssistantList = async () => {
         const res = await listAssistants(maxInitialFetchedAssistants);
         console.log(res)
-        setAllSavedAssistants(res.assistants);
-        const newSavedAssistants = [...res.assistants.slice(0, assistantsPerPage)]
+        const updatedWithThreads = await fetchAssistantThreadsFromLocalStorage(res.assistants)
+        setAllSavedAssistants(updatedWithThreads)
+        const newSavedAssistants = updatedWithThreads.slice(0, assistantsPerPage)
         setSavedAssistants(newSavedAssistants)
+
     }
+    
 
     useEffect(() => {
         fetchInitialAssistantList();
@@ -44,6 +47,10 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
         
     
     }, [currentPage]);
+
+
+
+
 
 
         const getIndexOfLastDisplayedAssistant = () => {
@@ -96,7 +103,6 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
                             <td>{assistant.threadId}</td>
                             <td>
                                 <button onClick={() => startExistingAssistant(assistant.assistantId, assistant.threadId)}>Start</button>
-                                <button onClick={() => deleteAssistant(assistant.assistantId!)}>Delete</button>
                                 <button onClick={() => clearAssistantThread(assistant.assistantId!)}>Clear thread</button>
                             </td>
                         </tr>

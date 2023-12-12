@@ -56,16 +56,32 @@ export const fetchAssistantsFromLocalStorage = (): Array<StoredAssistant> => {
     return assistants;
 }
 
+export const fetchAssistantThreadsFromLocalStorage = async(allSavedAssistants: any) => {
+  // Fetch assistants from localStorage
+  const localStorageAssistantsJson = localStorage.getItem('storedAssistants');
+  const localStorageAssistants = localStorageAssistantsJson ? JSON.parse(localStorageAssistantsJson) : [];
 
-export const removeAssistantFromLocalStorage = (assistantId: string): void => {
-    const storedAssistants = window.localStorage.getItem("storedAssistants");
-    if (storedAssistants) {
-        let loadedStoredAssistants: Array<StoredAssistant> = JSON.parse(storedAssistants);
-        // Filter out the assistant to be removed
-        loadedStoredAssistants = loadedStoredAssistants.filter(a => a.assistantId !== assistantId);
-        // Save the updated assistants array back to Local Storage
-        window.localStorage.setItem("storedAssistants", JSON.stringify(loadedStoredAssistants));
-    }
+  // Fetch assistants from the API (this is a placeholder for your actual API call)
+console.log(localStorageAssistants)
+console.log("local storage above")
+    
+    // Reconcile threadIds from localStorage with the assistants from the API
+    const reconciledAssistants = allSavedAssistants.map((savedAssistant) => {
+  
+      const localStorageAssistant = localStorageAssistants.find((localStorageAssistant) => localStorageAssistant.assistantId === savedAssistant.id);
+      if (localStorageAssistant) {
+        // If found in localStorage, add the threadId to the assistant from the API
+        return {
+          ...savedAssistant,
+          threadId: localStorageAssistant.threadId
+        };
+      }
+      return savedAssistant;
+    });
+    console.log("below")
+    console.log(reconciledAssistants)
+    // Update the state with the reconciled assistants
+   return reconciledAssistants;
 }
 
 export const clearAssistantThreadFromLocalStorage = (assistantId: string): void => {
@@ -85,3 +101,4 @@ export const clearAssistantThreadFromLocalStorage = (assistantId: string): void 
         }
     }
 }
+
