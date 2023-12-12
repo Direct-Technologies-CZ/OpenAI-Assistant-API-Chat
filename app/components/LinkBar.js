@@ -5,11 +5,12 @@ const LinkBar = () => (
 
   <div className="items-center hidden w-full justify-between sm:flex border-b border-gray-200 bg-green-600">
     <a
-      href="/deploy"
+      href="https://openai-assistant.ip-k8s.direct.cz/"
       target="_blank"
       className="rounded-lg p-2 transition-colors duration-200 hover:bg-stone-100 sm:bottom-auto"
     >
-      <VercelIcon />
+      <img src="https://www.direct-technologies.cz/static/header/direct-technologies-black.svg" alt="logo"
+      style={{width: "100px", marginTop: "10px", marginBottom: "20px"}}/>
     </a>
     <a href="/storedAssistants">
       <button className="px-4 py-2 bg-cyan-600 text-white font-bold rounded border border-cyan-700 hover:bg-cyan-700 focus:outline-none focus:border-cyan-900 focus:ring ring-cyan-300 transition ease-in duration-200 text-center text-base shadow-md">
