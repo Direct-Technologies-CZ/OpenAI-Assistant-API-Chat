@@ -1,10 +1,11 @@
 import { listAssistants } from "@/app/services/api";
 import { clearAssistantThreadFromLocalStorage, fetchAssistantThreadsFromLocalStorage} from "@/app/utils/localStorageAssistants";
-import { FC, useEffect, useState } from "react";
+import { FC, use, useEffect, useState } from "react";
 
 export interface StoredAssistant {
     name: string | null;
-    description: string | null;
+    description?: string | null;
+    instructions?: string | null;
     id: string | null;
     threadId?: string | null;
 }
@@ -24,19 +25,20 @@ interface AssistantListProps {
 const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
     const [savedAssistants, setSavedAssistants] = useState<StoredAssistant[]>([]);
     const [allSavedAssistants, setAllSavedAssistants] = useState<StoredAssistant[]>([]);
+    
     const [currentPage, setCurrentPage] = useState(0);
+    // can change from 1-100
     const assistantsPerPage = 20;
+    // can change from 20-100
     const maxInitialFetchedAssistants = 100;
         
     
     const fetchInitialAssistantList = async () => {
         const res = await listAssistants(maxInitialFetchedAssistants);
-        console.log(res)
         const updatedWithThreads = await fetchAssistantThreadsFromLocalStorage(res.assistants)
         setAllSavedAssistants(updatedWithThreads)
         const newSavedAssistants = updatedWithThreads.slice(0, assistantsPerPage)
         setSavedAssistants(newSavedAssistants)
-
     }
     
 
@@ -44,6 +46,10 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
         fetchInitialAssistantList();
         
     }, []);
+
+    useEffect(() => {
+        console.log(savedAssistants)
+    }, [savedAssistants])
 
     useEffect(() => {
         if(currentPage === 0){
@@ -80,7 +86,6 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
         setSavedAssistants(savedAssistants.map(assistant => assistant.id === assistantId ? { ...assistant, threadId: null } : assistant));
     };
 
-    // Calculate the current items to show
 
 
 
@@ -91,9 +96,9 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Description</th>
-                        <th>ID</th>
-                        <th>Thread ID</th>
+                        <th>Instructions</th>
+     
+                        <th>Existing thread?</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -101,12 +106,14 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
                     {savedAssistants.map((assistant, index) => (
                         <tr key={index} className="border-b">
                             <td>{assistant.name}</td>
-                            <td>{assistant.description}</td>
-                            <td>{assistant.id}</td>
-                            <td>{assistant.threadId}</td>
+                            <td>{assistant.instructions}</td>
+      
+                            <td>{assistant.threadId ? "YES" : "NO"}</td>
                             <td>
-                                <button onClick={() => startExistingAssistant(assistant.id, assistant.threadId || null)}>Start</button>
-                                <button onClick={() => clearAssistantThread(assistant.id!)}>Clear thread</button>
+                                <div className="flex space-x-3">
+                                    <button onClick={() => startExistingAssistant(assistant.id, assistant.threadId || null)}>Start</button>
+                                    {assistant.threadId && <button onClick={() => clearAssistantThread(assistant.id!)}>Clear thread</button>}
+                                </div>
                             </td>
                         </tr>
                     ))}
