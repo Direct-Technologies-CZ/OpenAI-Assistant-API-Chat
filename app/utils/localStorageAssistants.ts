@@ -20,7 +20,11 @@ export const saveAssistantsToLocalStorage = ({ assistantId, threadId }: LocalSto
 }
 
 export const addAssistantThreadToLocalStorage = (assistantId: string, threadId: string): void => {
-    const storedAssistants = window.localStorage.getItem("storedAssistants");
+    let storedAssistants = window.localStorage.getItem("storedAssistants");
+    if (storedAssistants === null) {
+        saveAssistantsToLocalStorage({assistantId, threadId});
+        storedAssistants = window.localStorage.getItem("storedAssistants");
+    }
     if (storedAssistants) {
         let loadedStoredAssistants: Array<LocalStoredAssistant> = JSON.parse(storedAssistants);
         console.log(assistantId)
