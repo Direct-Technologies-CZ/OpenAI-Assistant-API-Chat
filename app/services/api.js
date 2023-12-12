@@ -1,5 +1,17 @@
 // api.js
 
+export const listAssistants = async (limit, before, after) => {
+    console.log('Listing assistants...');
+
+    const response = await fetch(`/api/listAssistants`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({limit, before, after})
+    });
+    // ... existing error handling and response parsing
+    return response.json();
+};
+
 // Uploads a base64 encoded image and gets a description
 export const uploadImageAndGetDescription = async (base64Image) => {
     console.log('Uploading image...');
@@ -128,23 +140,7 @@ export const uploadImageAndGetDescription = async (base64Image) => {
     return await response.json();
   };
 
-  // Lists assistants
-  export const listAssistants = async () => {
-    console.log('Listing assistants...');
-    const response = await fetch('/api/listAssistants', {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    });
-    if (!response.ok) {
-      console.error(`Error fetching assistants: ${response.status} ${response.statusText}`);
-      throw new Error(`Failed to list assistants: ${response.status} ${response.statusText}`);
-    }
-    const jsonResponse = await response.json();
-    console.log(jsonResponse)
-    console.log('Assistants listed successfully');
-    return jsonResponse;
-  };
-  
+
   // Lists messages
   export const listMessages = async (threadId, runId) => {
     console.log('Listing messages...');

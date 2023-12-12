@@ -19,14 +19,18 @@ const openai = new OpenAI({
 }); 
 
 // Define an asynchronous POST function to handle incoming requests
-export async function GET() {
+export async function POST(req: NextRequest) {
+  console.log("here!")
   try {
+
+    const data = await req.json();
+    const {limit, after, before } = data;
 
     // Log the received thread ID for debugging
     console.log(`Fetching all assistants`);
 
     // Retrieve messages for the given thread ID using the OpenAI API
-    const assistants = await openai.beta.assistants.list()
+    const assistants = await openai.beta.assistants.list({limit: limit, after: after, before: before})
     
     // Log the list of assistants
     console.log(assistants.data)
