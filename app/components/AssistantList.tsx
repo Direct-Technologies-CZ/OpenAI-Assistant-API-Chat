@@ -92,13 +92,13 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
 
     return (
         <div className="flex flex-col">
-            <table className="min-w-full divide-y divide-gray-200 table-fixed">
+            <table className="min-w-full divide-y divide-gray-200 table-fixed text-center">
                 <thead>
                     <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Instructions</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Existing thread?</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Instructions</th>
+                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Existing thread?</th>
+                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -136,12 +136,12 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
             <div className="flex justify-between mt-4">
                 {currentPage === 0 ?
                     (<p></p>) :
-                    (<button onClick={() => setCurrentPage(currentPage - 1)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    (<button onClick={() => setCurrentPage(currentPage - 1)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-4 rounded">
                         Previous
                     </button>)
                 }
                 {indexOfLastDisplayedAssistant !== (allSavedAssistants.length - 1) &&
-                    (<button onClick={() => setCurrentPage(currentPage + 1)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    (<button onClick={() => setCurrentPage(currentPage + 1)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-4 rounded">
                         Next
                     </button>)
                 }

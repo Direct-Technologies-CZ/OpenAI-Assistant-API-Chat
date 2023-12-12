@@ -114,10 +114,10 @@ export default function Chat() {
   };
 
   return (
-    <main className="flex flex-col items-center justify-between pb-40 bg-space-grey-light">
-      <div className='absolute top-5 w-full px-5'>
+    <main className="flex flex-col items-center justify-between pb-40 ">
+  
         <LinkBar />
-      </div>
+
       
       {chatHasStarted || assistantId || isLoadingFirstMessage  ? (
         <MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending} progress={progress} isFirstMessage={isLoadingFirstMessage} fileDetails={chatFileDetails} />
