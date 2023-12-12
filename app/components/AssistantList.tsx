@@ -1,5 +1,5 @@
 import { listAssistants } from "@/app/services/api";
-import { clearAssistantThreadFromLocalStorage, fetchAssistantThreadsFromLocalStorage} from "@/app/utils/localStorageAssistants";
+import { clearAssistantThreadFromLocalStorage, fetchAssistantThreadsFromLocalStorage } from "@/app/utils/localStorageAssistants";
 import { FC, use, useEffect, useState } from "react";
 
 export interface StoredAssistant {
@@ -25,14 +25,14 @@ interface AssistantListProps {
 const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
     const [savedAssistants, setSavedAssistants] = useState<StoredAssistant[]>([]);
     const [allSavedAssistants, setAllSavedAssistants] = useState<StoredAssistant[]>([]);
-    
+
     const [currentPage, setCurrentPage] = useState(0);
     // can change from 1-100
     const assistantsPerPage = 20;
     // can change from 20-100
     const maxInitialFetchedAssistants = 100;
-        
-    
+
+
     const fetchInitialAssistantList = async () => {
         const res = await listAssistants(maxInitialFetchedAssistants);
         const updatedWithThreads = await fetchAssistantThreadsFromLocalStorage(res.assistants)
@@ -40,11 +40,11 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
         const newSavedAssistants = updatedWithThreads.slice(0, assistantsPerPage)
         setSavedAssistants(newSavedAssistants)
     }
-    
+
 
     useEffect(() => {
         fetchInitialAssistantList();
-        
+
     }, []);
 
     useEffect(() => {
@@ -52,13 +52,13 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
     }, [savedAssistants])
 
     useEffect(() => {
-        if(currentPage === 0){
+        if (currentPage === 0) {
             setSavedAssistants([...allSavedAssistants.slice(0, assistantsPerPage)])
         } else {
             setSavedAssistants([...allSavedAssistants.slice(currentPage * assistantsPerPage, (currentPage + 1) * assistantsPerPage)])
         }
-        
-    
+
+
     }, [currentPage]);
 
 
@@ -66,18 +66,18 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
 
 
 
-        const getIndexOfLastDisplayedAssistant = () => {
-        if(savedAssistants.length === 0) return
+    const getIndexOfLastDisplayedAssistant = () => {
+        if (savedAssistants.length === 0) return
         const idOfLastDisplayedAssistant = savedAssistants[savedAssistants.length - 1].id
         return allSavedAssistants.indexOf(allSavedAssistants?.find((assistant) => assistant.id === idOfLastDisplayedAssistant)!)
     }
 
     const indexOfLastDisplayedAssistant = getIndexOfLastDisplayedAssistant()
 
-      useEffect(() => {
-     
+    useEffect(() => {
+
         console.log(indexOfLastDisplayedAssistant)
-    
+
     }, [indexOfLastDisplayedAssistant]);
 
 
@@ -92,40 +92,59 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
 
     return (
         <div className="flex flex-col">
-            <table className="table-auto w-full">
+            <table className="min-w-full divide-y divide-gray-200 table-fixed">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Instructions</th>
-     
-                        <th>Existing thread?</th>
-                        <th>Actions</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Instructions</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Existing thread?</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="bg-white divide-y divide-gray-200">
                     {savedAssistants.map((assistant, index) => (
-                        <tr key={index} className="border-b">
-                            <td>{assistant.name}</td>
-                            <td>{assistant.instructions}</td>
-      
-                            <td>{assistant.threadId ? "YES" : "NO"}</td>
-                            <td>
+                        <tr key={index}>
+                            <td className="px-6 py-4 whitespace-nowrap">{assistant.name}</td>
+                              <td className="px-6 py-4" style={{ maxWidth: "250px" }}> {/* Set a maximum width */}
+                        <div className={"whitespace-normal overflow-auto"}> {/* Enable text wrapping and scrolling if needed */}
+                            {assistant.instructions}
+                        </div>
+                    </td>
+                            <td className="px-6 py-4 whitespace-nowrap">{assistant.threadId ? "YES" : "NO"}</td>
+                            <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="flex space-x-3">
-                                    <button onClick={() => startExistingAssistant(assistant.id, assistant.threadId || null)}>Start</button>
-                                    {assistant.threadId && <button onClick={() => clearAssistantThread(assistant.id!)}>Clear thread</button>}
+                                    <button
+                                        onClick={() => startExistingAssistant(assistant.id, assistant.threadId || null)}
+                                        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                        Start
+                                    </button>
+                                    {assistant.threadId && (
+                                        <button
+                                            onClick={() => clearAssistantThread(assistant?.id!)}
+                                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                            Clear thread
+                                        </button>
+                                    )}
                                 </div>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+                <div className="border-t border-gray-200 mt-4"></div> {/* Horizontal border added here */}
+
             <div className="flex justify-between mt-4">
-                {currentPage === 0 ? <p></p> : <button onClick={() => setCurrentPage(currentPage - 1)}>
-                    Previous
-                </button>}
-                {indexOfLastDisplayedAssistant! !== (allSavedAssistants.length - 1) && <button onClick={() => setCurrentPage(currentPage + 1)} >
-                    Next
-                </button>}
+                {currentPage === 0 ?
+                    (<p></p>) :
+                    (<button onClick={() => setCurrentPage(currentPage - 1)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Previous
+                    </button>)
+                }
+                {indexOfLastDisplayedAssistant !== (allSavedAssistants.length - 1) &&
+                    (<button onClick={() => setCurrentPage(currentPage + 1)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Next
+                    </button>)
+                }
             </div>
         </div>
     );
