@@ -1,13 +1,13 @@
-import { StoredAssistant } from "@/app/components/AssistantList";
+import { LocalStoredAssistant, StoredAssistant } from "@/app/components/AssistantList";
 
-export const saveAssistantsToLocalStorage = ({ assistantName, assistantDescription, assistantId, threadId }: StoredAssistant): void => {
+export const saveAssistantsToLocalStorage = ({ assistantName, assistantDescription, assistantId, threadId }: LocalStoredAssistant): void => {
     const storedAssistants = window.localStorage.getItem("storedAssistants");
     const newAssistant = { assistantName, assistantDescription, assistantId, threadId };
 
     if (storedAssistants === null) {
         localStorage.setItem("storedAssistants", JSON.stringify([newAssistant]));
     } else {
-        const loadedStoredAssistants: Array<StoredAssistant> = JSON.parse(storedAssistants);
+        const loadedStoredAssistants: Array<LocalStoredAssistant> = JSON.parse(storedAssistants);
 
         // Check if the specific StoredAssistant already exists
         const existingAssistant = loadedStoredAssistants.find(a => a.assistantId === assistantId);
@@ -22,7 +22,7 @@ export const saveAssistantsToLocalStorage = ({ assistantName, assistantDescripti
 export const addAssistantThreadToLocalStorage = (assistantId: string, threadId: string): void => {
     const storedAssistants = window.localStorage.getItem("storedAssistants");
     if (storedAssistants) {
-        let loadedStoredAssistants: Array<StoredAssistant> = JSON.parse(storedAssistants);
+        let loadedStoredAssistants: Array<LocalStoredAssistant> = JSON.parse(storedAssistants);
 
         // Find the index of the assistant to be cleared
         const index = loadedStoredAssistants.findIndex(a => a.assistantId === assistantId);
@@ -66,9 +66,9 @@ console.log(localStorageAssistants)
 console.log("local storage above")
     
     // Reconcile threadIds from localStorage with the assistants from the API
-    const reconciledAssistants = allSavedAssistants.map((savedAssistant) => {
+    const reconciledAssistants = allSavedAssistants.map((savedAssistant: StoredAssistant) => {
   
-      const localStorageAssistant = localStorageAssistants.find((localStorageAssistant) => localStorageAssistant.assistantId === savedAssistant.id);
+      const localStorageAssistant = localStorageAssistants.find((localStorageAssistant: LocalStoredAssistant) => localStorageAssistant.assistantId === savedAssistant.id);
       if (localStorageAssistant) {
         // If found in localStorage, add the threadId to the assistant from the API
         return {
@@ -87,7 +87,7 @@ console.log("local storage above")
 export const clearAssistantThreadFromLocalStorage = (assistantId: string): void => {
     const storedAssistants = window.localStorage.getItem("storedAssistants");
     if (storedAssistants) {
-        let loadedStoredAssistants: Array<StoredAssistant> = JSON.parse(storedAssistants);
+        let loadedStoredAssistants: Array<LocalStoredAssistant> = JSON.parse(storedAssistants);
 
         // Find the index of the assistant to be cleared
         const index = loadedStoredAssistants.findIndex(a => a.assistantId === assistantId);

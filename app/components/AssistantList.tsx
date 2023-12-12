@@ -1,11 +1,18 @@
 import { listAssistants } from "@/app/services/api";
-import { clearAssistantThreadFromLocalStorage, fetchAssistantThreadsFromLocalStorage, fetchAssistantsFromLocalStorage, removeAssistantFromLocalStorage } from "@/app/utils/localStorageAssistants";
+import { clearAssistantThreadFromLocalStorage, fetchAssistantThreadsFromLocalStorage} from "@/app/utils/localStorageAssistants";
 import { FC, useEffect, useState } from "react";
 
 export interface StoredAssistant {
     name: string | null;
     description: string | null;
     id: string | null;
+    threadId?: string | null;
+}
+
+export interface LocalStoredAssistant {
+    assistantName: string | null;
+    assistantDescription: string | null;
+    assistantId: string | null;
     threadId?: string | null;
 }
 
@@ -67,14 +74,10 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
     
     }, [indexOfLastDisplayedAssistant]);
 
-    const deleteAssistant = (assistantId: string) => {
-        removeAssistantFromLocalStorage(assistantId);
-        setSavedAssistants(savedAssistants.filter(assistant => assistant.assistantId !== assistantId));
-    };
 
     const clearAssistantThread = (assistantId: string) => {
         clearAssistantThreadFromLocalStorage(assistantId);
-        setSavedAssistants(savedAssistants.map(assistant => assistant.assistantId === assistantId ? { ...assistant, threadId: null } : assistant));
+        setSavedAssistants(savedAssistants.map(assistant => assistant.id === assistantId ? { ...assistant, threadId: null } : assistant));
     };
 
     // Calculate the current items to show
@@ -102,8 +105,8 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant }) => {
                             <td>{assistant.id}</td>
                             <td>{assistant.threadId}</td>
                             <td>
-                                <button onClick={() => startExistingAssistant(assistant.assistantId, assistant.threadId)}>Start</button>
-                                <button onClick={() => clearAssistantThread(assistant.assistantId!)}>Clear thread</button>
+                                <button onClick={() => startExistingAssistant(assistant.id, assistant.threadId || null)}>Start</button>
+                                <button onClick={() => clearAssistantThread(assistant.id!)}>Clear thread</button>
                             </td>
                         </tr>
                     ))}
