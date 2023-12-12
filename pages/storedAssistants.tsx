@@ -12,7 +12,7 @@ import { useStartAssistant } from "@/app/hooks/useStartAssistant";
 import LinkBar from "@/app/components/LinkBar";
 import { InputForm, MessageList } from "@/app/components";
 import { addAssistantThreadToLocalStorage, saveAssistantsToLocalStorage } from "@/app/utils/localStorageAssistants";
-import AssistantList2 from "@/app/components/AssistantList2";
+
 import { useState } from "react";
 
 

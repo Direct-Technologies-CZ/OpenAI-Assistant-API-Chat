@@ -1,8 +1,8 @@
 import { LocalStoredAssistant, StoredAssistant } from "@/app/components/AssistantList";
 
-export const saveAssistantsToLocalStorage = ({ assistantName, assistantDescription, assistantId, threadId }: LocalStoredAssistant): void => {
+export const saveAssistantsToLocalStorage = ({ assistantId, threadId }: LocalStoredAssistant): void => {
     const storedAssistants = window.localStorage.getItem("storedAssistants");
-    const newAssistant = { assistantName, assistantDescription, assistantId, threadId };
+    const newAssistant = { assistantId, threadId };
 
     if (storedAssistants === null) {
         localStorage.setItem("storedAssistants", JSON.stringify([newAssistant]));
@@ -23,9 +23,12 @@ export const addAssistantThreadToLocalStorage = (assistantId: string, threadId: 
     const storedAssistants = window.localStorage.getItem("storedAssistants");
     if (storedAssistants) {
         let loadedStoredAssistants: Array<LocalStoredAssistant> = JSON.parse(storedAssistants);
+        console.log(assistantId)
+        console.log(loadedStoredAssistants)
 
         // Find the index of the assistant to be cleared
         const index = loadedStoredAssistants.findIndex(a => a.assistantId === assistantId);
+        console.log(index)
         if (index !== -1) {
             // Clear the threadId property of the specified assistant
             loadedStoredAssistants[index].threadId = threadId;
@@ -33,6 +36,8 @@ export const addAssistantThreadToLocalStorage = (assistantId: string, threadId: 
 
             // Save the updated assistants array back to Local Storage
             window.localStorage.setItem("storedAssistants", JSON.stringify(loadedStoredAssistants));
+        } else {
+            saveAssistantsToLocalStorage({assistantId, threadId})
         }
     }
 }

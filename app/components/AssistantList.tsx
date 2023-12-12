@@ -10,8 +10,8 @@ export interface StoredAssistant {
 }
 
 export interface LocalStoredAssistant {
-    assistantName: string | null;
-    assistantDescription: string | null;
+    assistantName?: string | null;
+    assistantDescription?: string | null;
     assistantId: string | null;
     threadId?: string | null;
 }
