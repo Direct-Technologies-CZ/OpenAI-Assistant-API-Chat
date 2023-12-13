@@ -9,7 +9,7 @@
  * Path: /api/listRuns
  */
 
-import { Message } from '@/app/components/MessageList';
+import { Message } from '@/app/components/lists/MessageList';
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from "openai";
 

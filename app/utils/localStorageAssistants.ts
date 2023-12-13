@@ -1,4 +1,4 @@
-import { LocalStoredAssistant, StoredAssistant } from "@/app/components/AssistantList";
+import { LocalStoredAssistant, StoredAssistant } from "@/app/components/lists/AssistantList";
 
 export const saveAssistantsToLocalStorage = ({ assistantId, threadId }: LocalStoredAssistant): void => {
     const storedAssistants = window.localStorage.getItem("storedAssistants");

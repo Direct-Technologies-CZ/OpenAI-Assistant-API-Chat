@@ -5,11 +5,11 @@
 
 import "@/app/globals.css";
 import { NextPage } from 'next';
-import AssistantList from '@/app/components/AssistantList';
+import AssistantList from '@/app/components/lists/AssistantList';
 import { useChatState } from "@/app/hooks/useChatState";
 import { useChatManager } from "@/app/hooks/useChatManager";
 import { useStartAssistant } from "@/app/hooks/useStartAssistant";
-import LinkBar from "@/app/components/LinkBar";
+import LinkBar from "@/app/components/navigation/LinkBar";
 import { InputForm, MessageList } from "@/app/components";
 import { addAssistantThreadToLocalStorage, saveAssistantsToLocalStorage } from "@/app/utils/localStorageAssistants";
 
@@ -117,7 +117,7 @@ const StoredAssistantsPage: NextPage = () => {
             }
         } else if (chatManager) {
             try {
-                await chatManager.startAssistantWithId(assistantId!, "say hi to user!");
+                await chatManager.startAssistantWithId(assistantId!, initialThreadMessage || "Say hi to user!");
                 console.log('Assistant started:', chatManager.getChatState());
                 const { threadId } = chatManager.getChatState()
                 addAssistantThreadToLocalStorage(assistantId!, threadId!)
@@ -146,7 +146,7 @@ const StoredAssistantsPage: NextPage = () => {
                 {chatHasStarted || assistantId || isLoadingFirstMessage ? (
                     <><MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending} progress={progress} isFirstMessage={isLoadingFirstMessage} fileDetails={chatFileDetails} /><InputForm {...{ input: inputmessage, setInput: setInputmessage, handleFormSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading, handleChatFilesUpload, chatFileDetails, removeChatFile }} /></>
                 ) : (
-                  <AssistantList startExistingAssistant={startExistingAssistant} />
+                  <AssistantList startExistingAssistant={startExistingAssistant} initialThreadMessage={initialThreadMessage} setInitialThreadMessage={setInitialThreadMessage} />
                 )}
 
 
