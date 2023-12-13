@@ -97,7 +97,7 @@ const WelcomeForm = ({
               //######################################
               //just delete the disabled prop to enable GPT4
               //disabled GPT4 because its expensive in the Demo
-              disabled={process.env.NEXT_PUBLIC_DEMO_MODE === 'true'}
+              // disabled={process.env.NEXT_PUBLIC_DEMO_MODE === 'true'}
             //######################################
             >
               GPT-4

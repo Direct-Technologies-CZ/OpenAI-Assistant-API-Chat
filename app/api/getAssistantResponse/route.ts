@@ -34,6 +34,8 @@ export async function POST(req: NextRequest) {
     // Log the count of retrieved messages for debugging
     console.log(`Retrieved ${messages.data.length} messages`);
 
+
+    console.log(messages)
     
     // Find the first assistant message
     const assistantMessage = messages.data.find(message => message.role === 'assistant');
@@ -47,9 +49,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No assistant message content found" });
     }
 
-    if (assistantMessageContent.type !== "text") {
-      return NextResponse.json({ error: "Assistant message is not text, only text supported in this demo" });
+    if(assistantMessageContent.type === "image_file"){
+      return NextResponse.json({ ok: true, messages: assistantMessageContent.image_file.file_id });
     }
+
     // Return the retrieved messages as a JSON response
     return NextResponse.json({ ok: true, messages: assistantMessageContent.text.value });
   } catch (error) {
