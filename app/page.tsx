@@ -39,7 +39,7 @@ export default function Chat() {
 
 
   useChatManager(setChatMessages, setStatusMessage, setChatManager, setIsMessageLoading, setProgress, setIsLoadingFirstMessage);
-  useStartAssistant(assistantId, chatManager, initialThreadMessage);
+  useStartAssistant(assistantId, chatManager, initialThreadMessage || "say hi to user");
 
 
   const startChatAssistant = async () => {
@@ -47,7 +47,7 @@ export default function Chat() {
     setStartLoading(true);
     if (chatManager) {
       try {
-        await chatManager.startAssistant({ assistantName, assistantModel, assistantDescription }, files, initialThreadMessage);
+        await chatManager.startAssistant({ assistantName, assistantModel, assistantDescription }, files, initialThreadMessage || "say hi to user");
         console.log('Assistant started:', chatManager.getChatState());
         setChatStarted(true);
         const { assistantId, threadId } = chatManager.getChatState()
@@ -122,7 +122,7 @@ export default function Chat() {
       {chatHasStarted || assistantId || isLoadingFirstMessage  ? (
         <MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending} progress={progress} isFirstMessage={isLoadingFirstMessage} fileDetails={chatFileDetails} />
       ) : (
-        <WelcomeForm {...{assistantName, setAssistantName, assistantDescription, setAssistantDescription, assistantModel, setAssistantModel, files, handleFilesChange, startChatAssistant, isButtonDisabled, isStartLoading, statusMessage, setInitialThreadMessage, initialThreadMessage}} />
+        <WelcomeForm {...{assistantName, setAssistantName, assistantDescription, setAssistantDescription, assistantModel, setAssistantModel, files, handleFilesChange, startChatAssistant, isStartLoading, statusMessage, setInitialThreadMessage, initialThreadMessage}} />
       )}
       <InputForm {...{input: inputmessage, setInput: setInputmessage, handleFormSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading, handleChatFilesUpload, chatFileDetails, removeChatFile}} />
     </main>

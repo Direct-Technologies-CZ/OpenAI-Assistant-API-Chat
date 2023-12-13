@@ -119,7 +119,6 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant, setInit
                 showModal={isModalOpen}
                 onClose={() => {
                     setIsModalOpen(false);
-                    startExistingAssistant(currentAssistantId, currentThreadId)
                 }}>
 
                 <div className="space-y-6">
@@ -130,6 +129,12 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant, setInit
                     <div className="pb-4">
                         <TextInput setInputValue={setInitialThreadMessage} inputValue={initialThreadMessage} />
                     </div>
+                    <button onClick={() => {
+                        setIsModalOpen(false);
+                        startExistingAssistant(currentAssistantId, currentThreadId)
+                }} className="mt-4 bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">
+                        Start assistant!
+                    </button>
                 </div>
             </Modal>
 

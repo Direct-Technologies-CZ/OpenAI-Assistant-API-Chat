@@ -21,9 +21,6 @@ const Modal: React.FC<ModalPropsWithChildren> = ({ showModal, onClose, children 
     <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         {children}
-        <button onClick={onClose} className="mt-4 bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700">
-          Close
-        </button>
       </div>
     </div>,
     document.body // Attach the modal to the body element

@@ -42,13 +42,13 @@ const WelcomeForm = ({
   files,
   handleFilesChange,
   startChatAssistant,
-  isButtonDisabled,
   isStartLoading,
   statusMessage,
 }) => {
   const [lastProgress, setLastProgress] = useState(0);
   const baseStatusMessage = statusMessage.replace(/ \(\d+ seconds elapsed\)$/, '');
   let progress = statusToProgress[baseStatusMessage] || 0;
+  const isButtonDisabled = !assistantName || !assistantDescription
 
   if (progress === 0 && lastProgress !== 0) {
     progress = lastProgress;
@@ -60,7 +60,7 @@ const WelcomeForm = ({
     <div className="border-gray-500 bg-gray-200 sm:mx-0 mx-5 mt-36 max-w-screen-md rounded-md border-2 sm:w-full">
       <div className="flex flex-col space-y-4 p-7 sm:p-10">
         <h1 className="text-lg font-semibold text-black">
-          Welcome to Agent42!
+          Welcome to ChatGPT!
         </h1>
         <form className="flex flex-col space-y-3">
           <input
@@ -80,19 +80,16 @@ const WelcomeForm = ({
             required
             className="p-2 border border-gray-200 rounded-md"
           />
-
-          {/* Existing buttons and inputs remain unchanged */}
-
-          {/* Text area for setting initialThreadMessage */}
+          
           <textarea
-            placeholder="Status Message"
+            placeholder="Initial thread message, if not set defaults to 'say hi to user!'"
             value={initialThreadMessage}
             onChange={(e) => setInitialThreadMessage(e.target.value)}
             required
             className="p-2 border border-gray-200 rounded-md"
           />
 
-                    <div>
+          <div className='flex space-x-3'>
             <button
               type="button"
               onClick={() => setAssistantModel('gpt-4-1106-preview')}
@@ -151,7 +148,7 @@ const WelcomeForm = ({
           <button
             type="button"
             onClick={startChatAssistant}
-            // disabled={isButtonDisabled || !assistantName || !assistantDescription || files.length === 0}
+            disabled={isButtonDisabled}
             className={`p-2 rounded-md flex justify-center items-center relative overflow-hidden ${isButtonDisabled ? 'bg-gray-500 text-gray-300' : 'bg-green-500 text-white'}`}
           >
             <div
