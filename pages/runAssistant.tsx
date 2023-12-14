@@ -151,7 +151,9 @@ const RunAssistantPage: NextPage = () => {
                 {chatHasStarted || assistantId || isLoadingFirstMessage ? (
                     <><MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending} progress={progress} isFirstMessage={isLoadingFirstMessage} fileDetails={chatFileDetails} /><InputForm {...{ input: inputmessage, setInput: setInputmessage, handleFormSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading, handleChatFilesUpload, chatFileDetails, removeChatFile }} /></>
                 ) : (
-                    <p>{query.assistant} {query.thread} {query.initialMessage}</p>
+                    <><p> Running assistant with id:  {query.assistant}    </p>{query.thread && <p> With the thread {query.thread} </p> } {query.initialMessage && <p> With the initial message   {query.initialMessage}</p>}</>
+                        
+                    
                 )}
             </main></>)
 };
