@@ -49,12 +49,36 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No assistant message content found" });
     }
 
+
+    if(assistantMessageContent.type === "text"){
+        let text = assistantMessageContent.text.value;
+        const annotations = assistantMessageContent.text.annotations;
+        annotations.forEach((annotation) => {
+            if (annotation.type === "file_path") {
+                const filePath = annotation.text;
+                const fileId = annotation.file_path.file_id;
+                const downloadPath = `/api/downloadFile/${fileId}`;
+                // Create a regex pattern to match the markdown link format
+                const pattern = new RegExp(`\\[([^\\]]+)\\]\\(${filePath.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\)`, 'g');
+                text = text.replace(pattern, (match, p1) => `[${p1}](${downloadPath})`);
+            }
+        });
+        return NextResponse.json({ ok: true, messages: text });
+    }
+    console.log(assistantMessageContent.type);
     if(assistantMessageContent.type === "image_file"){
-      return NextResponse.json({ ok: true, messages: assistantMessageContent.image_file.file_id });
+        const filePath = assistantMessageContent.image_file.file_id;
+        const downloadPath = `/api/downloadImage/${filePath}`;
+        console.log(downloadPath);
+
+        const text = `![${filePath}](${downloadPath})`;
+
+        console.log(text);
+        return NextResponse.json({ ok: true, messages: text});
     }
 
     // Return the retrieved messages as a JSON response
-    return NextResponse.json({ ok: true, messages: assistantMessageContent.text.value });
+    return NextResponse.json({ ok: false, messages: "Error" });
   } catch (error) {
     // Log any errors that occur during the process
     console.error(`Error occurred: ${error}`);

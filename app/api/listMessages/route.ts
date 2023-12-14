@@ -36,7 +36,28 @@ export async function POST(req: NextRequest) {
     const messageList: Message[] = [];
     messages.data.forEach((message) => {
      if(message.content[0].type === "text"){
-      messageList.push({content: message.content[0].text.value, role: message.role})
+         let text = message.content[0].text.value;
+         const annotations = message.content[0].text.annotations;
+         annotations.forEach((annotation) => {
+             if (annotation.type === "file_path") {
+                 const filePath = annotation.text;
+                 const fileId = annotation.file_path.file_id;
+                 const downloadPath = `/api/downloadFile/${fileId}`;
+                 // Create a regex pattern to match the markdown link format
+                 const pattern = new RegExp(`\\[([^\\]]+)\\]\\(${filePath.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\)`, 'g');
+                 text = text.replace(pattern, (match, p1) => `[${p1}](${downloadPath})`);
+             }
+         });
+
+
+      messageList.push({content: text, role: message.role})
+     } else {
+         if(message.content[0].type === "image_file"){
+             const filePath = message.content[0].image_file.file_id;
+             const downloadPath = `/api/downloadImage/${filePath}`;
+             const text = `![${filePath}](${downloadPath})`;
+             messageList.push({content: text, role: message.role})
+         }
      }
     });
     
