@@ -2,6 +2,7 @@ import TextInput from "@/app/components/inputs/TextInput";
 import Modal from "@/app/components/modals/Modal";
 import { listAssistants } from "@/app/services/api";
 import { clearAssistantThreadFromLocalStorage, fetchAssistantThreadsFromLocalStorage } from "@/app/utils/localStorageAssistants";
+import { useRouter } from "next/router";
 import { Dispatch, FC, SetStateAction, use, useEffect, useState } from "react";
 import { threadId } from "worker_threads";
 
@@ -21,19 +22,19 @@ export interface LocalStoredAssistant {
 }
 
 interface AssistantListProps {
-    startExistingAssistant: (assistantId: string | null, threadId: string | null) => void;
-    setInitialThreadMessage: Dispatch<SetStateAction<string>>;
-    initialThreadMessage: string;
+
 }
 
 
-const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant, setInitialThreadMessage, initialThreadMessage }) => {
+const AssistantList: FC<AssistantListProps> = ({ }) => {
     const [savedAssistants, setSavedAssistants] = useState<StoredAssistant[]>([]);
     const [allSavedAssistants, setAllSavedAssistants] = useState<StoredAssistant[]>([]);
     const [shownInstructions, setShownInstructions] = useState<Record<string, boolean>>({});
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentAssistantId, setCurrentAssistantId] = useState<string | null>(null);
     const [currentThreadId, setCurrentThreadId] = useState<string | null>(null);
+    const [currentInitialThreadMessage, setCurrentInitialThreadMessage] = useState<string | null>(null)
+     const router = useRouter();
 
     const toggleInstructions = (index: number) => {
         setShownInstructions(prev => ({
@@ -61,7 +62,7 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant, setInit
         // Perform any additional logic here, e.g., fetch the initial message
         setCurrentAssistantId(assistantId)
         setCurrentThreadId(threadId)
-        setInitialThreadMessage(''); // Set the initial message if needed
+        setCurrentInitialThreadMessage(''); // Set the initial message if needed
         setIsModalOpen(true); // Open the modal
     };
 
@@ -127,11 +128,12 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant, setInit
                         Set an initial message for the thread. If not set, it will default to "Say hi to user!"
                     </p>
                     <div className="pb-4">
-                        <TextInput setInputValue={setInitialThreadMessage} inputValue={initialThreadMessage} />
+                        <TextInput setInputValue={setCurrentInitialThreadMessage} inputValue={currentInitialThreadMessage} />
                     </div>
                     <button onClick={() => {
                         setIsModalOpen(false);
-                        startExistingAssistant(currentAssistantId, currentThreadId)
+
+                        router.push(`/runAssistant?assistant=${currentAssistantId}&thread=${currentThreadId}&initialMessage=${currentInitialThreadMessage}`)
                 }} className="mt-4 bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">
                         Start assistant!
                     </button>
@@ -172,8 +174,10 @@ const AssistantList: FC<AssistantListProps> = ({ startExistingAssistant, setInit
                                     <div className="flex space-x-3">
                                         <button
                                             onClick={() => {
+                                                console.log(assistant.threadId)
+                                                console.log(assistant.id)
                                                 if (assistant.threadId) {
-                                                    startExistingAssistant(assistant.id, assistant.threadId)
+                                                    router.push(`/runAssistant?assistant=${assistant.id}&thread=${assistant.threadId}`)
                                                 } else {
                                                     handleStartExistingAssistant(assistant.id, null)
                                                 }
