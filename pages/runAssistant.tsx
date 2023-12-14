@@ -130,15 +130,31 @@ const RunAssistantPage: NextPage = () => {
     };
 
   useEffect(() => {
+    
+
+    // if you get only assistant query and no thread query start a new thread with existing assistant, for aesthetic URL purposes
+    if(typeof query.assistant === "string" && query.assistant !== 'null' && !((typeof query.assistant === "string" && query.assistant !== "null" && query.thread === "null"))) 
+    {
+        startExistingAssistant(query?.assistant!, null)
+    }
+
+
+    // if you get an initial message in query, set initial message state from chat manager
     if(typeof query.initialMessage === 'string' && query.initialMessage.length > 0){
+
         setInitialThreadMessage(query.initialMessage)
     }
-    // Make sure the parameters are available
+    
+    // if you get both query assistant and query thread run the assistant id and thread
     if (typeof query.assistant === "string" && typeof query.thread === "string" && query.assistant !== 'null' &&  query.thread !== 'null') {
+ 
+
       startExistingAssistant(query?.assistant!, query.thread)
     }
 
+    // identical functionality to first block but not so aesthetic - if you get only the assistant id query and the thread is null, start a new thread with the existing assistant
     if(typeof query.assistant === "string" && query.assistant !== "null" && query.thread === "null"){
+ 
       startExistingAssistant(query?.assistant!, null)
     }
   }, [chatManager, query]);
