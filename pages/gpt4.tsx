@@ -5,7 +5,7 @@ const NotFoundPage: React.FC = () => {
     // Redirect to home page after a short delay
     const timer = setTimeout(() => {
       window.location.href = '/';
-    }, 1000); // Redirect after 3 seconds
+    }, 10); // Redirect after 3 seconds
 
     // Clean up the timer when the component unmounts
     return () => clearTimeout(timer);

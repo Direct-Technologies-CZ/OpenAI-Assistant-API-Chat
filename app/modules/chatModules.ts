@@ -26,10 +26,27 @@ interface Message {
 export const submitUserMessage = async (input: string, threadId: string, setStatusMessage: (message: string) => void, fileIds: string[]): Promise<void> => {
   console.log('File IDs in submitUserMessage:', fileIds);
   setStatusMessage('Submitting user message...');
-  const message = { input, threadId, fileIds };
-  await addMessage(message);
-  setStatusMessage('User message submitted successfully.');
+    const message = {input, threadId, fileIds};
+    await addMessage(message);
+    setStatusMessage('User message submitted successfully.');
 };
+
+export const getPainting = async (input: string) =>  {
+    console.log('Painting an image...');
+
+    const response = await fetch('/api/paint', {
+        method: 'POST',
+        body: JSON.stringify({message: input}),
+    });
+    if (!response.ok) {
+        console.error('Paint failed');
+        throw new Error('Paint failed');
+    }
+    const jsonResponse = await response.json();
+    console.log('Server response:', jsonResponse); // Add this line
+    return jsonResponse.url;
+};
+
 
 
 /**

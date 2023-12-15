@@ -1,19 +1,19 @@
-import { InputForm } from '@/app/components';
+import {InputForm} from '@/app/components';
 import "@/app/globals.css";
 import AssistantList from '@/app/components/lists/AssistantList';
 import MessageList from '@/app/components/lists/MessageList';
 import LinkBar from '@/app/components/navigation/LinkBar';
-import { useChatManager } from '@/app/hooks/useChatManager';
-import { useChatState } from '@/app/hooks/useChatState';
-import { addAssistantThreadToLocalStorage } from '@/app/utils/localStorageAssistants';
-import { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import {useChatManager} from '@/app/hooks/useChatManager';
+import {useChatState} from '@/app/hooks/useChatState';
+import {addAssistantThreadToLocalStorage} from '@/app/utils/localStorageAssistants';
+import {NextPage} from 'next';
+import {useRouter} from 'next/router';
+import {useEffect} from 'react';
 
 
 const RunAssistantPage: NextPage = () => {
 
-        const {
+    const {
         assistantName, setAssistantName,
         assistantModel, setAssistantModel,
         assistantDescription, setAssistantDescription,
@@ -42,10 +42,18 @@ const RunAssistantPage: NextPage = () => {
 
     useChatManager(setChatMessages, setStatusMessage, setChatManager, setIsMessageLoading, setProgress, setIsLoadingFirstMessage);
 
-  const router = useRouter();
-  const { query } = router;
+    const router = useRouter();
+    const {query} = router;
 
-      const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        await handleSubmit(e, 'message');
+    }
+
+    const handlePaintSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        await handleSubmit(e, 'paint');
+    };
+
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>, type: string) {
         e.preventDefault();
         if (isSending) {
             return;
@@ -58,14 +66,14 @@ const RunAssistantPage: NextPage = () => {
             setChatUploadedFiles([]); // Reset the state after files are uploaded
             setChatFileDetails([]); // Reset the file details state
             try {
-                await chatManager.sendMessage(message, currentFiles, chatFileDetails); // Send the saved files and file details
+                await chatManager.sendMessage(message, type, currentFiles, chatFileDetails); // Send the saved files and file details
             } catch (error) {
                 console.error('Error sending message:', error);
             } finally {
                 setIsSending(false);
             }
         }
-    };
+    }
 
     const handleFilesChange = (selectedFiles: File[]) => setFiles(selectedFiles);
 
@@ -95,7 +103,7 @@ const RunAssistantPage: NextPage = () => {
         setChatUploadedFiles(updatedUploadedFiles);
     };
 
-      const startExistingAssistant = async (assistantId: string | null, threadId?: string | null) => {
+    const startExistingAssistant = async (assistantId: string | null, threadId?: string | null) => {
         setIsButtonDisabled(true);
         setStartLoading(true);
         if (chatManager && threadId !== null) {
@@ -115,7 +123,7 @@ const RunAssistantPage: NextPage = () => {
             try {
                 await chatManager.startAssistantWithId(assistantId!, initialThreadMessage || "Say hi to user!");
                 console.log('Assistant started:', chatManager.getChatState());
-                const { threadId } = chatManager.getChatState()
+                const {threadId} = chatManager.getChatState()
                 addAssistantThreadToLocalStorage(assistantId!, threadId!)
                 setChatStarted(true);
 
@@ -129,49 +137,53 @@ const RunAssistantPage: NextPage = () => {
         }
     };
 
-  useEffect(() => {
-    
-
-    // if you get only assistant query and no thread query start a new thread with existing assistant, for aesthetic URL purposes
-    if(typeof query.assistant === "string" && query.assistant !== 'null' && !((typeof query.assistant === "string" && query.assistant !== "null" && query.thread === "null"))) 
-    {
-        startExistingAssistant(query?.assistant!, null)
-    }
+    useEffect(() => {
 
 
-    // if you get an initial message in query, set initial message state from chat manager
-    if(typeof query.initialMessage === 'string' && query.initialMessage.length > 0){
+        // if you get only assistant query and no thread query start a new thread with existing assistant, for aesthetic URL purposes
+        if (typeof query.assistant === "string" && query.assistant !== 'null' && !((typeof query.assistant === "string" && query.assistant !== "null" && query.thread === "null"))) {
+            startExistingAssistant(query?.assistant!, null)
+        }
 
-        setInitialThreadMessage(query.initialMessage)
-    }
-    
-    // if you get both query assistant and query thread run the assistant id and thread
-    if (typeof query.assistant === "string" && typeof query.thread === "string" && query.assistant !== 'null' &&  query.thread !== 'null') {
- 
 
-      startExistingAssistant(query?.assistant!, query.thread)
-    }
+        // if you get an initial message in query, set initial message state from chat manager
+        if (typeof query.initialMessage === 'string' && query.initialMessage.length > 0) {
 
-    // identical functionality to first block but not so aesthetic - if you get only the assistant id query and the thread is null, start a new thread with the existing assistant
-    if(typeof query.assistant === "string" && query.assistant !== "null" && query.thread === "null"){
- 
-      startExistingAssistant(query?.assistant!, null)
-    }
-  }, [chatManager, query]);
+            setInitialThreadMessage(query.initialMessage)
+        }
+
+        // if you get both query assistant and query thread run the assistant id and thread
+        if (typeof query.assistant === "string" && typeof query.thread === "string" && query.assistant !== 'null' && query.thread !== 'null') {
+
+
+            startExistingAssistant(query?.assistant!, query.thread)
+        }
+
+        // identical functionality to first block but not so aesthetic - if you get only the assistant id query and the thread is null, start a new thread with the existing assistant
+        if (typeof query.assistant === "string" && query.assistant !== "null" && query.thread === "null") {
+
+            startExistingAssistant(query?.assistant!, null)
+        }
+    }, [chatManager, query]);
 
     return (
         <>
             <main className="flex flex-col items-center justify-between pb-40">
-                <LinkBar />
+                <LinkBar/>
 
                 {chatHasStarted || assistantId || isLoadingFirstMessage ? (
-                    <><MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending} progress={progress} isFirstMessage={isLoadingFirstMessage} fileDetails={chatFileDetails} /><InputForm {...{ input: inputmessage, setInput: setInputmessage, handleFormSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading, handleChatFilesUpload, chatFileDetails, removeChatFile }} /></>
+                    <><MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending}
+                                   progress={progress} isFirstMessage={isLoadingFirstMessage}
+                                   fileDetails={chatFileDetails}/><InputForm {...{input: inputmessage, setInput: setInputmessage, handleFormSubmit, handlePaintSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading, handleChatFilesUpload, chatFileDetails, removeChatFile}} /></>
                 ) : (
-                    <><p> Running assistant with id:  {query.assistant}    </p>{query.thread && <p> With the thread {query.thread} </p> } {query.initialMessage && <p> With the initial message   {query.initialMessage}</p>}</>
-                        
-                    
+                    <><p> Running assistant with id: {query.assistant}    </p>{query.thread &&
+                        <p> With the thread {query.thread} </p>} {query.initialMessage &&
+                        <p> With the initial message {query.initialMessage}</p>}</>
+
+
                 )}
-            </main></>)
+            </main>
+        </>)
 };
 
 export default RunAssistantPage;

@@ -7,11 +7,12 @@ import {
 } from '@/app/modules/assistantModules';
 
 import {
-  submitUserMessage,
-  fetchAssistantResponse,
-  updateChatState
+    submitUserMessage,
+    fetchAssistantResponse,
+    getPainting
 } from '@/app/modules/chatModules';
 import { cancelOngoingRun, listMessages, listRuns } from '@/app/services/api';
+import messageList from "@/app/components/lists/MessageList";
 
 /**
  * Interface for the state of the chat
@@ -292,7 +293,7 @@ async listAndCancelOngoingRun(threadId: string | null){
 
 
 // Method to send a message
-async sendMessage(input: string, files: File[], fileDetails: any[]): Promise<void> { // Add a new parameter for the files
+async sendMessage(input: string, type: string, files: File[], fileDetails: any[]): Promise<void> { // Add a new parameter for the files
   console.log('Sending message...');
   this.state.setProgress(0);
   this.state.isSending = true; 
@@ -317,25 +318,31 @@ async sendMessage(input: string, files: File[], fileDetails: any[]): Promise<voi
       }
       console.log('File IDs during Chat:', ChatFileIds);
       // Submit the user's message
-      await submitUserMessage(input, this.state.threadId, this.state.setStatusMessage, ChatFileIds); // Pass the file IDs here
-      console.log('User message submitted. Running assistant...');
-      
-      // Run the assistant
+        if (type === 'paint') {
+            const paintUrl = await getPainting(input);
+            this.getCurrentMessages().push({ role: 'assistant', content: `![Image](${paintUrl})`});
+        }
+        else {
+          await submitUserMessage(input, this.state.threadId, this.state.setStatusMessage, ChatFileIds); // Pass the file IDs here
 
-      this.state.runId = await runChatAssistant(this.state.assistantId as string, this.state.threadId as string);
-      console.log('Assistant run successfully. Fetching assistant response...');  
+          console.log('User message submitted. Running assistant...');
 
-      // Fetch the assistant's response
-      console.log("getting assistant response from sendMessage component")
-      const response = await fetchAssistantResponse(this.state.runId as string, this.state.threadId as string, this.state.setStatusMessage, this.state.setProgress,0);
-      console.log('Assistant response fetched. Adding to chat state...');
-      
-      
-      // Add the assistant's response to the messages
-      const newAssistantMessage = { role: 'assistant', content: response };
-      this.state.messages = [...this.state.messages, newAssistantMessage];
-      this.state.setChatMessages(this.state.messages);
-      
+          // Run the assistant
+
+          this.state.runId = await runChatAssistant(this.state.assistantId as string, this.state.threadId as string);
+          console.log('Assistant run successfully. Fetching assistant response...');
+
+          // Fetch the assistant's response
+          console.log("getting assistant response from sendMessage component")
+          const response = await fetchAssistantResponse(this.state.runId as string, this.state.threadId as string, this.state.setStatusMessage, this.state.setProgress,0);
+          console.log('Assistant response fetched. Adding to chat state...');
+
+
+          // Add the assistant's response to the messages
+          const newAssistantMessage = { role: 'assistant', content: response };
+          this.state.messages = [...this.state.messages, newAssistantMessage];
+          this.state.setChatMessages(this.state.messages);
+        }
     } else {
       console.error('ThreadId or AssistantId is null');
     }
@@ -355,6 +362,8 @@ async sendMessage(input: string, files: File[], fileDetails: any[]): Promise<voi
     console.log('Getting chat state');
     return this.state;
   }
+
+
 }
 
 
