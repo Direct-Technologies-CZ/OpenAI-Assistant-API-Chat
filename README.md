@@ -2,7 +2,7 @@
 
 # OpenAI Assistant API Chat
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fadmineral%2FOpenAI-Assistant-API-Chat&env=OPENAI_API_KEY&envDescription=OpenAI%20API%20Key&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys&project-name=openai-assistant-api-chat&repository-name=OpenAI-Assistant-API-Chat)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FDirect-Technologies-CZ%2FOpenAI-Assistant-API-Chat&env=OPENAI_API_KEY&envDescription=OpenAI%20API%20Key&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys&project-name=openai-assistant-api-chat&repository-name=OpenAI-Assistant-API-Chat)
 [![Live Demo](https://img.shields.io/badge/Live-Demo-green.svg)](https://open-ai-assistant-api-chat.vercel.app)
 
 ## Introduction
@@ -30,14 +30,14 @@ To deploy this application with Vercel, click on the "Deploy with Vercel" button
 
 Please note that you'll need to provide your OpenAI API key during the deployment process. This key is used to authenticate your application's requests to the OpenAI API.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fadmineral%2FOpenAI-Assistant-API-Chat&env=OPENAI_API_KEY&envDescription=OpenAI%20API%20Key&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys&project-name=openai-assistant-api-chat&repository-name=OpenAI-Assistant-API-Chat)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FDirect-Technologies-CZ%2FOpenAI-Assistant-API-Chat&env=OPENAI_API_KEY&envDescription=OpenAI%20API%20Key&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys&project-name=openai-assistant-api-chat&repository-name=OpenAI-Assistant-API-Chat)
 
 
 In addition to the OpenAI API key, you can also specify a default Assistant ID during the deployment process. This ID determines which AI assistant is used in the chat application. If you set this ID, the application will use this assistant for the chat. If you do not set this ID, the application will prompt the user to enter the assistant details.
 
 To deploy the application with both the OpenAI API key and a hardcoded Assistant ID, click on the "Deploy with Vercel" button below. You will be prompted to enter both your OpenAI API key and your Assistant ID.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fadmineral%2FOpenAI-Assistant-API-Chat&env=OPENAI_API_KEY,REACT_APP_ASSISTANT_ID&envDescription=OpenAI%20API%20Key,Assistant%20ID&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys&project-name=openai-assistant-api-chat&repository-name=OpenAI-Assistant-API-Chat)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FDirect-Technologies-CZ%2FOpenAI-Assistant-API-Chat&env=OPENAI_API_KEY,REACT_APP_ASSISTANT_ID&envDescription=OpenAI%20API%20Key,Assistant%20ID&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys&project-name=openai-assistant-api-chat&repository-name=OpenAI-Assistant-API-Chat)
 ## Features
 
 - **Personalized AI Assistant**: Customize the assistant's name, model, and description for a unique chat experience.
@@ -56,7 +56,7 @@ To deploy the application with both the OpenAI API key and a hardcoded Assistant
 
 #For Developer
 
-[GPT4-Vision api router ](https://github.com/admineral/OpenAI-Assistant-API-Chat/tree/main/app/api/upload_gpt4v/route.ts)
+[GPT4-Vision api router ](https://github.com/Direct-Technologies-CZ/OpenAI-Assistant-API-Chat/tree/main/app/api/upload_gpt4v/route.ts)
 
 
 
@@ -74,7 +74,7 @@ Please note that this application is currently in the beta phase and is continuo
 ### Installation
 1. **Clone the Repository**:
    ```
-   git clone https://github.com/admineral/OpenAI-Assistant-API-Chat.git
+   git clone https://github.com/Direct-Technologies-CZ/OpenAI-Assistant-API-Chat.git
    ```
 2. **Install Dependencies**:
    Navigate to the project directory and run:
