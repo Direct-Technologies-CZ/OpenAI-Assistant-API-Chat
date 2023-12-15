@@ -1,21 +1,21 @@
 // File: app/api/downloadFile/[file_id]/route.ts
 
-import {NextRequest, NextResponse} from 'next/server'; // Import NextRequest and NextResponse from 'next/server'
-import fetch from 'node-fetch';
+import { NextRequest, NextResponse } from 'next/server'; // Import NextRequest and NextResponse from 'next/server'
+
 import OpenAI from "openai";
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-export async function GET(request: NextRequest, {params}: { params: { file_id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { file_id: string } }) {
     // Extract the file_id from the dynamic route parameter
-    const {file_id} = params;
+    const { file_id } = params;
 
     // Validate the file_id
     if (!file_id) {
         // Return a response with a 400 status code
-        return new Response(JSON.stringify({error: 'A valid file ID is required'}), {
+        return new Response(JSON.stringify({ error: 'A valid file ID is required' }), {
             status: 400,
             headers: {
                 'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest, {params}: { params: { file_id: s
         // Check if the OpenAI API response is OK
         if (!contentResponse.ok) {
             // Return a response with the status code from the OpenAI response
-            return new NextResponse(JSON.stringify({error: 'Failed to retrieve file content from OpenAI'}), {
+            return new NextResponse(JSON.stringify({ error: 'Failed to retrieve file content from OpenAI' }), {
                 status: contentResponse.status,
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest, {params}: { params: { file_id: s
         });
     } catch (error) {
         // Handle any errors that occur during the API request
-        return new NextResponse(JSON.stringify({error: 'Internal Server Error'}), {
+        return new NextResponse(JSON.stringify({ error: 'Internal Server Error' }), {
             status: 500,
             headers: {
                 'Content-Type': 'application/json',

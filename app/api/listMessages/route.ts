@@ -14,9 +14,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from "openai";
 
 // Initialize OpenAI client using the API key from environment variables
-const openai = new OpenAI({ 
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-}); 
+});
 
 // Define an asynchronous POST function to handle incoming requests
 export async function POST(req: NextRequest) {
@@ -32,35 +32,35 @@ export async function POST(req: NextRequest) {
 
     // Retrieve messages for the given thread ID using the OpenAI API
     const messages = await openai.beta.threads.messages.list(threadId);
-    
+
     const messageList: Message[] = [];
     messages.data.forEach((message) => {
-     if(message.content[0].type === "text"){
-         let text = message.content[0].text.value;
-         const annotations = message.content[0].text.annotations;
-         annotations.forEach((annotation) => {
-             if (annotation.type === "file_path") {
-                 const filePath = annotation.text;
-                 const fileId = annotation.file_path.file_id;
-                 const downloadPath = `/api/downloadFile/${fileId}`;
-                 // Create a regex pattern to match the markdown link format
-                 const pattern = new RegExp(`\\[([^\\]]+)\\]\\(${filePath.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\)`, 'g');
-                 text = text.replace(pattern, (match, p1) => `[${p1}](${downloadPath})`);
-             }
-         });
+      if (message.content[0].type === "text") {
+        let text = message.content[0].text.value;
+        const annotations = message.content[0].text.annotations;
+        annotations.forEach((annotation) => {
+          if (annotation.type === "file_path") {
+            const filePath = annotation.text;
+            const fileId = annotation.file_path.file_id;
+            const downloadPath = `/api/downloadFile/${fileId}`;
+            // Create a regex pattern to match the markdown link format
+            const pattern = new RegExp(`\\[([^\\]]+)\\]\\(${filePath.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\)`, 'g');
+            text = text.replace(pattern, (match, p1) => `[${p1}](${downloadPath})`);
+          }
+        });
 
 
-      messageList.push({content: text, role: message.role})
-     } else {
-         if(message.content[0].type === "image_file"){
-             const filePath = message.content[0].image_file.file_id;
-             const downloadPath = `/api/downloadImage/${filePath}`;
-             const text = `![${filePath}](${downloadPath})`;
-             messageList.push({content: text, role: message.role})
-         }
-     }
+        messageList.push({ content: text, role: message.role })
+      } else {
+        if (message.content[0].type === "image_file") {
+          const filePath = message.content[0].image_file.file_id;
+          const downloadPath = `/api/downloadImage/${filePath}`;
+          const text = `![${filePath}](${downloadPath})`;
+          messageList.push({ content: text, role: message.role })
+        }
+      }
     });
-    
+
     // Reverse array 
     const reversedMessages = messageList.reverse()
 
