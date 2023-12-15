@@ -31,20 +31,39 @@ export const submitUserMessage = async (input: string, threadId: string, setStat
     setStatusMessage('User message submitted successfully.');
 };
 
-export const getPainting = async (input: string) =>  {
+export const getPainting = async (input: string): Promise<string> => {
     console.log('Painting an image...');
 
     const response = await fetch('/api/paint', {
         method: 'POST',
         body: JSON.stringify({message: input}),
     });
+
     if (!response.ok) {
         console.error('Paint failed');
         throw new Error('Paint failed');
     }
-    const jsonResponse = await response.json();
-    console.log('Server response:', jsonResponse); // Add this line
-    return jsonResponse.url;
+
+    const { taskId } = await response.json();
+
+    // Explicitní anotace návratového typu funkce
+    const checkStatus = async (): Promise<string> => {
+        console.log('Checking status... ' + taskId)
+        const statusResponse = await fetch(`/api/paint?taskId=${taskId}`);
+        if (!statusResponse.ok) {
+            throw new Error('Error checking task status');
+        }
+        const status = await statusResponse.json();
+
+        if (status.done) {
+            return status.url;  // Když je úloha hotová, vrátí URL
+        } else {
+            await new Promise(resolve => setTimeout(resolve, 3000)); // Čeká 3 sekundu
+            return checkStatus();  // Rekurzivní volání pro další kontrolu
+        }
+    };
+    console.log(taskId + ' finished')
+    return await checkStatus();
 };
 
 
