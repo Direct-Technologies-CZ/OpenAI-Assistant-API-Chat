@@ -1,10 +1,12 @@
 import TextInput from "@/app/components/inputs/TextInput";
 import Modal from "@/app/components/modals/Modal";
-import { listAssistants } from "@/app/services/api";
-import { clearAssistantThreadFromLocalStorage, fetchAssistantThreadsFromLocalStorage } from "@/app/utils/localStorageAssistants";
-import { useRouter } from "next/router";
-import { Dispatch, FC, SetStateAction, use, useEffect, useState } from "react";
-import { threadId } from "worker_threads";
+import {listAssistants} from "@/app/services/api";
+import {
+    clearAssistantThreadFromLocalStorage,
+    fetchAssistantThreadsFromLocalStorage
+} from "@/app/utils/localStorageAssistants";
+import {useRouter} from "next/router";
+import {FC, useEffect, useState} from "react";
 
 export interface StoredAssistant {
     name: string | null;
@@ -26,7 +28,7 @@ interface AssistantListProps {
 }
 
 
-const AssistantList: FC<AssistantListProps> = ({ }) => {
+const AssistantList: FC<AssistantListProps> = ({}) => {
     const [savedAssistants, setSavedAssistants] = useState<StoredAssistant[]>([]);
     const [allSavedAssistants, setAllSavedAssistants] = useState<StoredAssistant[]>([]);
     const [shownInstructions, setShownInstructions] = useState<Record<string, boolean>>({});
@@ -34,7 +36,7 @@ const AssistantList: FC<AssistantListProps> = ({ }) => {
     const [currentAssistantId, setCurrentAssistantId] = useState<string | null>(null);
     const [currentThreadId, setCurrentThreadId] = useState<string | null>(null);
     const [currentInitialThreadMessage, setCurrentInitialThreadMessage] = useState<string | null>(null)
-     const router = useRouter();
+    const router = useRouter();
 
     const toggleInstructions = (index: number) => {
         setShownInstructions(prev => ({
@@ -85,11 +87,6 @@ const AssistantList: FC<AssistantListProps> = ({ }) => {
 
     }, [currentPage]);
 
-
-
-
-
-
     const getIndexOfLastDisplayedAssistant = () => {
         if (savedAssistants.length === 0) return
         const idOfLastDisplayedAssistant = savedAssistants[savedAssistants.length - 1].id
@@ -107,11 +104,8 @@ const AssistantList: FC<AssistantListProps> = ({ }) => {
 
     const clearAssistantThread = (assistantId: string) => {
         clearAssistantThreadFromLocalStorage(assistantId);
-        setSavedAssistants(savedAssistants.map(assistant => assistant.id === assistantId ? { ...assistant, threadId: null } : assistant));
+        setSavedAssistants(savedAssistants.map(assistant => assistant.id === assistantId ? {...assistant, threadId: null} : assistant));
     };
-
-
-
 
 
     return (
@@ -128,13 +122,15 @@ const AssistantList: FC<AssistantListProps> = ({ }) => {
                         Set an initial message for the thread. If not set, it will default to "Say hi to user!"
                     </p>
                     <div className="pb-4">
-                        <TextInput setInputValue={setCurrentInitialThreadMessage} inputValue={currentInitialThreadMessage} />
+                        <TextInput setInputValue={setCurrentInitialThreadMessage}
+                                   inputValue={currentInitialThreadMessage}/>
                     </div>
                     <button onClick={() => {
                         setIsModalOpen(false);
 
                         router.push(`/runAssistant?assistant=${currentAssistantId}&thread=${currentThreadId}&initialMessage=${currentInitialThreadMessage}`)
-                }} className="w-full sm:w-auto mt-4 bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">
+                    }}
+                            className="w-full sm:w-auto mt-4 bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">
                         Start assistant!
                     </button>
                 </div>
@@ -142,36 +138,28 @@ const AssistantList: FC<AssistantListProps> = ({ }) => {
 
             <div className="grid sm:flex sm:flex-col overflow-x-auto ">
                 <div className="overflow-x-scroll">
-                <table className="min-w-full divide-y divide-gray-200 table-fixed text-center">
-                    <thead>
+                    <table className="min-w-full divide-y divide-gray-200 table-fixed text-center">
+                        <thead>
                         <tr>
-                            <th className="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                            <th className="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Instructions</th>
-                            <th className="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Existing thread?</th>
-                            <th className="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th className="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-left">Name</th>
+                            <th className="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-left">Actions</th>
                         </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
                         {savedAssistants.map((assistant, index) => (
                             <tr key={index}>
-                                <td className="px-6 py-4 whitespace-nowrap">{assistant.name}</td>
-                                <td className="px-6 py-4" style={{ maxWidth: "250px" }}> {/* Set a maximum width */}
-                                    <td className="px-6 py-4">
-                                        {shownInstructions[index] ? (
-                                            <div className="overflow-auto cursor-pointer" onClick={() => toggleInstructions(index)}>
+                                <td className="px-6 py-4 whitespace-nowrap align-top text-left">
+                                    <div onClick={() => toggleInstructions(index)} className="cursor-pointer underline">
+                                        {assistant.name}
+                                    </div>
+                                    {shownInstructions[index] ? (
+                                            <div className="overflow-auto cursor-pointer align-top max-w-prose whitespace-pre-wrap"
+                                                 onClick={() => toggleInstructions(index)}>
                                                 {assistant.instructions}
                                             </div>
-                                        ) : (
-                                            <div className="overflow-hidden whitespace-nowrap cursor-pointer underline"
-                                                onClick={() => toggleInstructions(index)}
-                                                style={{ maxWidth: "250px" }}>
-                                                {assistant.instructions}
-                                            </div>
-                                        )}
-                                    </td>
+                                        ):''}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap">{assistant.threadId ? "YES" : "NO"}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">
+                                <td className="px-6 py-4 whitespace-nowrap align-top">
                                     <div className="flex space-x-3">
                                         <button
                                             onClick={() => {
@@ -200,19 +188,22 @@ const AssistantList: FC<AssistantListProps> = ({ }) => {
                                 </td>
                             </tr>
                         ))}
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
                 </div>
-                <div className="border-t border-gray-200 mt-4"></div> {/* Horizontal border added here */}
+                <div className="border-t border-gray-200 mt-4"></div>
+                {/* Horizontal border added here */}
 
                 <div className="flex justify-between my-4 items-center">
                     {currentPage === 0 ?
                         (<p></p>) :
-                        (<button onClick={() => setCurrentPage(currentPage - 1)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-4 rounded">
+                        (<button onClick={() => setCurrentPage(currentPage - 1)}
+                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-4 rounded">
                             Previous
                         </button>)}
                     {indexOfLastDisplayedAssistant !== (allSavedAssistants.length - 1) &&
-                        (<button onClick={() => setCurrentPage(currentPage + 1)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-4 rounded">
+                        (<button onClick={() => setCurrentPage(currentPage + 1)}
+                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-4 rounded">
                             Next
                         </button>)}
                 </div>

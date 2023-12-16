@@ -7,10 +7,8 @@ import { Analytics } from "@vercel/analytics/react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Agent42",
-  description:
-    "OpenAI Assistant",
-    metadataBase: 'https://mydomain.com'
+  title: "GPT",
+  description: "OpenAI Assistant"
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

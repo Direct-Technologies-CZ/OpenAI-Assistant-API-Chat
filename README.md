@@ -37,7 +37,7 @@ In addition to the OpenAI API key, you can also specify a default Assistant ID d
 
 To deploy the application with both the OpenAI API key and a hardcoded Assistant ID, click on the "Deploy with Vercel" button below. You will be prompted to enter both your OpenAI API key and your Assistant ID.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FDirect-Technologies-CZ%2FOpenAI-Assistant-API-Chat&env=OPENAI_API_KEY,REACT_APP_ASSISTANT_ID&envDescription=OpenAI%20API%20Key,Assistant%20ID&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys&project-name=openai-assistant-api-chat&repository-name=OpenAI-Assistant-API-Chat)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FDirect-Technologies-CZ%2FOpenAI-Assistant-API-Chat&env=OPENAI_API_KEY&envDescription=OpenAI%20API%20Key,Assistant%20ID&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys&project-name=openai-assistant-api-chat&repository-name=OpenAI-Assistant-API-Chat)
 ## Features
 
 - **Personalized AI Assistant**: Customize the assistant's name, model, and description for a unique chat experience.
@@ -113,7 +113,7 @@ We look forward to growing this project with the community's support and creativ
   - `sendMessage`: Sends user messages to the assistant and updates the chat.
   - `getChatState`: Retrieves the current state of the chat, including messages and assistant status.
 
-### API Layer (`api.js`)
+### API Layer (`api.ts`)
 - **Purpose**: Acts as an intermediary between the front-end and various API routes.
 - **Key Functions**:
   - `uploadImageAndGetDescription`: Uploads images and gets descriptions using the GPT-4 Vision API.
@@ -142,7 +142,7 @@ We look forward to growing this project with the community's support and creativ
 - **Error Handling**: Robust error handling during chat operations.
 - **API Integration**: Integrates with API layer for message sending/receiving and chat thread management.
 
-### API Layer (`api.js`)
+### API Layer (`api.ts`)
 - **Central API Management**: Simplifies front-end interactions with a clean API interface.
 - **Error Handling**: Ensures smooth application operation with error handling in API requests.
 
@@ -159,7 +159,7 @@ We look forward to growing this project with the community's support and creativ
 
 ### Main Components and Flow
 - **ChatManager (`ChatManager.ts`)**: Central component managing the chat state and operations.
-- **API Layer (`api.js`)**: Intermediary for API interactions.
+- **API Layer (`api.ts`)**: Intermediary for API interactions.
 - **Assistant Modules (`assistantModules.ts`)**: Handles tasks related to the chat assistant.
 - **Chat Modules (`chatModules.ts`)**: Manages chat functionalities.
 
@@ -213,7 +213,7 @@ class ChatManager {
   - `sendMessage`: Handles sending messages to the assistant.
   - `getChatState`: Retrieves the current state of the chat.
 
-### `api.js`
+### `api.ts`
 This module contains functions for various API interactions required by the chat application.
 
 ```javascript

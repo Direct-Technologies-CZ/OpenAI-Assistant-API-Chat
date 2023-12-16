@@ -30,7 +30,7 @@ export const useChatState = () => {
   const inputRef = useRef(null);
   const formRef = useRef(null);
   const [chatManager, setChatManager] = useState<ChatManager | null>(null);
-  const [assistantId, setAssistantId] = useState<string | null>(process.env.REACT_APP_ASSISTANT_ID || '');
+  const [assistantId, setAssistantId] = useState<string | null>( '');
   const [isMessageLoading, setIsMessageLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isLoadingFirstMessage, setIsLoadingFirstMessage] = useState(false);

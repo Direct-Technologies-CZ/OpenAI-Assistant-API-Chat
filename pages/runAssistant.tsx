@@ -1,6 +1,5 @@
 import {InputForm} from '@/app/components';
 import "@/app/globals.css";
-import AssistantList from '@/app/components/lists/AssistantList';
 import MessageList from '@/app/components/lists/MessageList';
 import LinkBar from '@/app/components/navigation/LinkBar';
 import {useChatManager} from '@/app/hooks/useChatManager';
@@ -14,9 +13,6 @@ import {useEffect} from 'react';
 const RunAssistantPage: NextPage = () => {
 
     const {
-        assistantName, setAssistantName,
-        assistantModel, setAssistantModel,
-        assistantDescription, setAssistantDescription,
         inputmessage, setInputmessage,
         chatMessages, setChatMessages,
         isButtonDisabled, setIsButtonDisabled,

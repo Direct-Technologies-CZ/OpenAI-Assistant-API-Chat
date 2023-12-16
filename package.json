@@ -46,6 +46,7 @@
     "@types/jest": "^29.5.8",
     "dotenv": "^16.3.1",
     "prettier": "^3.1.0",
-    "prettier-plugin-tailwindcss": "^0.5.7"
+    "prettier-plugin-tailwindcss": "^0.5.7",
+    "@types/react": "^18.2.45"
   }
 }

@@ -1,6 +1,6 @@
-// api.js
+// api.ts
 
-export const listAssistants = async (limit, before, after) => {
+export const listAssistants = async (limit: number, before?: string, after?: string) => {
     console.log('Listing assistants...');
 
     const response = await fetch(`/api/listAssistants`, {
@@ -13,7 +13,7 @@ export const listAssistants = async (limit, before, after) => {
 };
 
 // Uploads a base64 encoded image and gets a description
-export const uploadImageAndGetDescription = async (base64Image) => {
+export const uploadImageAndGetDescription = async (base64Image: string) => {
     console.log('Uploading image...');
     const response = await fetch('/api/upload_gpt4v', {
       method: 'POST',
@@ -29,7 +29,7 @@ export const uploadImageAndGetDescription = async (base64Image) => {
   };
   
   // Uploads a file
-  export const uploadFile = async (file) => {
+  export const uploadFile = async (file: File) => {
     console.log('Uploading file...');
     const fileData = new FormData();
     fileData.append('file', file);
@@ -48,7 +48,7 @@ export const uploadImageAndGetDescription = async (base64Image) => {
   };
   
   // Creates an assistant
-  export const createAssistant = async (assistantName, assistantModel, assistantDescription, fileIds) => {
+  export const createAssistant = async (assistantName: string, assistantModel: string, assistantDescription: string, fileIds: string[]) => {
     console.log('Creating assistant...');
     
     // Log the assistant details and file IDs
@@ -71,7 +71,7 @@ export const uploadImageAndGetDescription = async (base64Image) => {
   };
   
   // Creates a thread
-  export const createThread = async (inputmessage) => {
+  export const createThread = async (inputmessage: string) => {
     console.log('Creating thread...');
     const response = await fetch('/api/createThread', {
       method: 'POST',
@@ -87,7 +87,7 @@ export const uploadImageAndGetDescription = async (base64Image) => {
   };
   
   // Runs an assistant
-  export const runAssistant = async (assistantId, threadId) => {
+  export const runAssistant = async (assistantId: string, threadId: string) => {
     console.log('Running assistant...');
     console.log(assistantId)
     console.log(threadId)
@@ -107,7 +107,7 @@ export const uploadImageAndGetDescription = async (base64Image) => {
 
 
   // Cancels run
-    export const cancelOngoingRun = async (threadId, runId) => {
+    export const cancelOngoingRun = async (threadId: string, runId: string) => {
     console.log('Running assistant...');
     console.log(threadId)
     
@@ -125,7 +125,7 @@ export const uploadImageAndGetDescription = async (base64Image) => {
   };
   
   // Checks the status of a run
-  export const checkRunStatus = async (threadId, runId) => {
+  export const checkRunStatus = async (threadId: string, runId: string) => {
     console.log('Checking run status...');
     const response = await fetch('/api/checkRunStatus', {
       method: 'POST',
@@ -142,7 +142,7 @@ export const uploadImageAndGetDescription = async (base64Image) => {
 
 
   // Lists messages
-  export const listMessages = async (threadId, runId) => {
+  export const listMessages = async (threadId: string, runId: string) => {
     console.log('Listing messages...');
     const response = await fetch('/api/listMessages', {
       method: 'POST',
@@ -159,7 +159,7 @@ export const uploadImageAndGetDescription = async (base64Image) => {
   };
 
   // Lists runs in a thread
-  export const listRuns = async (threadId) => {
+  export const listRuns = async (threadId: string) => {
     console.log('Listing runs...');
     const response = await fetch('/api/listRuns', {
       method: 'POST',
@@ -176,7 +176,7 @@ export const uploadImageAndGetDescription = async (base64Image) => {
   };
 
   // Fetches assistant response message 
-    export const getAssistantResponse = async (threadId, runId) => {
+    export const getAssistantResponse = async (threadId: string, runId: string) => {
     console.log('Listing messages...');
     const response = await fetch('/api/getAssistantResponse', {
       method: 'POST',
@@ -193,7 +193,7 @@ export const uploadImageAndGetDescription = async (base64Image) => {
   };
   
   // Adds a message
-  export const addMessage = async (data) => {
+  export const addMessage = async (data: { threadId: string, runId: string, message: string, fileIds: string[] }) => {
     console.log('File IDs in addMessage:', data.fileIds);
     console.log('Adding message...');
     const response = await fetch('/api/addMessage', {

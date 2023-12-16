@@ -5,7 +5,11 @@
 import {LinkBar, MessageList, WelcomeForm, InputForm} from '@/app/components';
 import {useChatState, useChatManager, useStartAssistant} from '@/app/hooks';
 import {saveAssistantsToLocalStorage} from '@/app/utils/localStorageAssistants';
-import messageList from "@/app/components/lists/MessageList";
+import AssistantList from "@/app/components/lists/AssistantList";
+import "@/app/globals.css";
+import {LoadingCircle} from "@/app/icons";
+import React from "react";
+
 
 export default function Chat() {
     const {
@@ -62,7 +66,6 @@ export default function Chat() {
             <LinkBar/>
 
             <WelcomeForm {...{assistantName, setAssistantName, assistantDescription, setAssistantDescription, assistantModel, setAssistantModel, files, handleFilesChange, startChatAssistant, isStartLoading, statusMessage, setInitialThreadMessage, initialThreadMessage}} />
-
 
         </main>
     );

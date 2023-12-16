@@ -1,15 +1,35 @@
+import React from 'react';
 import clsx from 'clsx';
-import Textarea from 'react-textarea-autosize';
-import {SendIcon, LoadingCircle, DocumentIcon, XIcon, ImageIcon, PainIcon, PaintIcon} from '@/app/icons';
+import Textarea, { TextareaAutosizeProps } from 'react-textarea-autosize';
+import { SendIcon, LoadingCircle, DocumentIcon, XIcon, ImageIcon, PaintIcon } from '@/app/icons';
 
-const InputForm = ({ input, setInput, handleFormSubmit, handlePaintSubmit, inputRef, formRef, disabled, chatStarted, isSending, isLoading, handleChatFilesUpload, chatFileDetails, removeChatFile }) => {
+// Definování typů pro soubory a props
+interface FileDetail {
+    name: string;
+    type: string;
+}
 
-    // Funkce pro stisk tlačítka Paint
-    const handlePaintButtonClick = (e) => {
+interface InputFormProps {
+    input: string;
+    setInput: (value: string) => void;
+    handleFormSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+    handlePaintSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+    inputRef: React.RefObject<TextareaAutosizeProps>;
+    formRef: React.RefObject<HTMLFormElement>;
+    disabled: boolean;
+    chatStarted: boolean;
+    isSending: boolean;
+    isLoading: boolean;
+    handleChatFilesUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    chatFileDetails: FileDetail[];
+    removeChatFile: (fileName: string) => void;
+}
+
+const InputForm: React.FC<InputFormProps> = ({ input, setInput, handleFormSubmit, handlePaintSubmit, inputRef, formRef, disabled, chatStarted, isSending, isLoading, handleChatFilesUpload, chatFileDetails, removeChatFile }) => {
+    const handlePaintButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         handlePaintSubmit(e);
     };
-
     return (
     <div className="fixed bottom-0 flex w-full flex-col items-center space-y-3 bg-gradient-to-b from-transparent via-gray-100 to-gray-100 p-5 pb-3 sm:px-0">
       <div className="flex flex-col items-stretch w-full max-w-screen-md">

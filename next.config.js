@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: "/github",
-        destination: "https://github.com/admineral/OpenAI-Assistant-API-Chat",
+        destination: "https://github.com/Direct-Technologies-CZ/OpenAI-Assistant-API-Chat",
         permanent: true,
       },
       {
@@ -13,9 +13,6 @@ const nextConfig = {
         permanent: true,
       },
     ];
-  },
-  env: {
-    REACT_APP_ASSISTANT_ID: process.env.REACT_APP_ASSISTANT_ID,
   },
 };
 

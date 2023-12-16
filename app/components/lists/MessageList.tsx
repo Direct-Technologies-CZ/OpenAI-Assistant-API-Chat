@@ -1,4 +1,5 @@
 // MessageList.tsx
+import React from 'react';
 import clsx from "clsx";
 import { Bot, User } from "lucide-react";
 import ReactMarkdown from "react-markdown";

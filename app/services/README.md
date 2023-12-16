@@ -11,11 +11,11 @@
 - **Error Handling**: Incorporates error handling in various methods.
 
 ### Usage
-- `api.js` is used for direct interactions with the backend APIs, handling various functionalities like file uploads, assistant management, and message handling.
+- `api.ts` is used for direct interactions with the backend APIs, handling various functionalities like file uploads, assistant management, and message handling.
 - `ChatManager.ts` manages the chat's internal state and operations, providing an interface to interact with the chat functionalities.
 
 ## Conclusion
-Both `api.js` and `ChatManager.ts` are integral to the chat application's functioning, offering a structured approach to managing API interactions and chat state. Understanding and utilizing these modules effectively is crucial for developers working on the chat application.
+Both `api.ts` and `ChatManager.ts` are integral to the chat application's functioning, offering a structured approach to managing API interactions and chat state. Understanding and utilizing these modules effectively is crucial for developers working on the chat application.
 
 
 
@@ -29,9 +29,9 @@ Both `api.js` and `ChatManager.ts` are integral to the chat application's functi
 
 --------------------------------------------
 
-# Code Explanation: API Functions in `api.js`
+# Code Explanation: API Functions in `api.ts`
 
-This section of the README is dedicated to explaining the various API functions defined in the `api.js` file. Each function serves a specific purpose in interacting with the server's API for various operations, like uploading images, creating threads, and managing assistants. The file is designed for developers with an intermediate level of JavaScript and API interaction knowledge.
+This section of the README is dedicated to explaining the various API functions defined in the `api.ts` file. Each function serves a specific purpose in interacting with the server's API for various operations, like uploading images, creating threads, and managing assistants. The file is designed for developers with an intermediate level of JavaScript and API interaction knowledge.
 
 ## Overview of Functions
 
@@ -177,7 +177,7 @@ export const addMessage = async (data) => {
 
 ## Summary
 
-The functions in `api.js` are essential for interacting with the backend API, providing a straightforward and async/await-based approach to handling various tasks like file uploads, assistant management, and message processing. Each function is designed to be modular and reusable, simplifying the integration of these functionalities into a broader application context.
+The functions in `api.ts` are essential for interacting with the backend API, providing a straightforward and async/await-based approach to handling various tasks like file uploads, assistant management, and message processing. Each function is designed to be modular and reusable, simplifying the integration of these functionalities into a broader application context.
 
 
 
