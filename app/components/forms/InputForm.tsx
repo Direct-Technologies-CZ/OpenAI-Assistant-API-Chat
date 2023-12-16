@@ -13,8 +13,8 @@ interface InputFormProps {
     input: string;
     setInput: (value: string) => void;
     handleFormSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-    handlePaintSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-    inputRef: React.RefObject<TextareaAutosizeProps>;
+    handlePaintSubmit: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    inputRef: React.RefObject<any>;
     formRef: React.RefObject<HTMLFormElement>;
     disabled: boolean;
     chatStarted: boolean;

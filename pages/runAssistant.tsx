@@ -7,7 +7,7 @@ import {useChatState} from '@/app/hooks/useChatState';
 import {addAssistantThreadToLocalStorage} from '@/app/utils/localStorageAssistants';
 import {NextPage} from 'next';
 import {useRouter} from 'next/router';
-import {useEffect} from 'react';
+import React, {useEffect} from 'react';
 
 
 const RunAssistantPage: NextPage = () => {
@@ -42,15 +42,17 @@ const RunAssistantPage: NextPage = () => {
     const {query} = router;
 
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        await handleSubmit(e, 'message');
+        e.preventDefault();
+        await handleSubmit('message');
     }
 
-    const handlePaintSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        await handleSubmit(e, 'paint');
+    const handlePaintSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        await handleSubmit('paint');
     };
 
-    async function handleSubmit(e: React.FormEvent<HTMLFormElement>, type: string) {
-        e.preventDefault();
+    async function handleSubmit(type: string) {
+
         if (isSending) {
             return;
         }
@@ -165,7 +167,8 @@ const RunAssistantPage: NextPage = () => {
                 {chatHasStarted || assistantId || isLoadingFirstMessage ? (
                     <><MessageList chatMessages={chatMessages} statusMessage={statusMessage} isSending={isSending}
                                    progress={progress} isFirstMessage={isLoadingFirstMessage}
-                                   fileDetails={chatFileDetails}/><InputForm {...{input: inputmessage, setInput: setInputmessage, handleFormSubmit, handlePaintSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading, handleChatFilesUpload, chatFileDetails, removeChatFile}} /></>
+                                   fileDetails={chatFileDetails}/>
+                        <InputForm {...{input: inputmessage, setInput: setInputmessage, handleFormSubmit, handlePaintSubmit, inputRef, formRef, disabled: isButtonDisabled || !chatManager, chatStarted: chatMessages.length > 0, isSending, isLoading: isMessageLoading, handleChatFilesUpload, chatFileDetails, removeChatFile}} /></>
                 ) : (
                     <><p> Running assistant with id: {query.assistant}    </p>{query.thread &&
                         <p> With the thread {query.thread} </p>} {query.initialMessage &&

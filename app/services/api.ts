@@ -13,7 +13,7 @@ export const listAssistants = async (limit: number, before?: string, after?: str
 };
 
 // Uploads a base64 encoded image and gets a description
-export const uploadImageAndGetDescription = async (base64Image: string) => {
+export const uploadImageAndGetDescription = async (base64Image: unknown) => {
     console.log('Uploading image...');
     const response = await fetch('/api/upload_gpt4v', {
       method: 'POST',
@@ -107,7 +107,7 @@ export const uploadImageAndGetDescription = async (base64Image: string) => {
 
 
   // Cancels run
-    export const cancelOngoingRun = async (threadId: string, runId: string) => {
+    export const cancelOngoingRun = async (threadId: string | null, runId: string) => {
     console.log('Running assistant...');
     console.log(threadId)
     
@@ -142,7 +142,7 @@ export const uploadImageAndGetDescription = async (base64Image: string) => {
 
 
   // Lists messages
-  export const listMessages = async (threadId: string, runId: string) => {
+  export const listMessages = async (threadId: string | null, runId: string) => {
     console.log('Listing messages...');
     const response = await fetch('/api/listMessages', {
       method: 'POST',
@@ -159,7 +159,7 @@ export const uploadImageAndGetDescription = async (base64Image: string) => {
   };
 
   // Lists runs in a thread
-  export const listRuns = async (threadId: string) => {
+  export const listRuns = async (threadId: string | null) => {
     console.log('Listing runs...');
     const response = await fetch('/api/listRuns', {
       method: 'POST',
@@ -193,7 +193,7 @@ export const uploadImageAndGetDescription = async (base64Image: string) => {
   };
   
   // Adds a message
-  export const addMessage = async (data: { threadId: string, runId: string, message: string, fileIds: string[] }) => {
+  export const addMessage = async (data: { threadId: string; input: string; fileIds: string[] }) => {
     console.log('File IDs in addMessage:', data.fileIds);
     console.log('Adding message...');
     const response = await fetch('/api/addMessage', {
