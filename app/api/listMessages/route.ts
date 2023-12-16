@@ -12,6 +12,7 @@
 import { Message } from '@/app/components/lists/MessageList';
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from "openai";
+import {extractImage, extractText} from "@/app/utils/markdown";
 
 // Initialize OpenAI client using the API key from environment variables
 const openai = new OpenAI({
@@ -38,24 +39,12 @@ export async function POST(req: NextRequest) {
       if (message.content[0].type === "text") {
         let text = message.content[0].text.value;
         const annotations = message.content[0].text.annotations;
-        annotations.forEach((annotation) => {
-          if (annotation.type === "file_path") {
-            const filePath = annotation.text;
-            const fileId = annotation.file_path.file_id;
-            const downloadPath = `/api/downloadFile/${fileId}`;
-            // Create a regex pattern to match the markdown link format
-            const pattern = new RegExp(`\\[([^\\]]+)\\]\\(${filePath.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\)`, 'g');
-            text = text.replace(pattern, (match, p1) => `[${p1}](${downloadPath})`);
-          }
-        });
-
-
+        text = extractText(annotations, text);
         messageList.push({ content: text, role: message.role })
       } else {
         if (message.content[0].type === "image_file") {
           const filePath = message.content[0].image_file.file_id;
-          const downloadPath = `/api/downloadImage/${filePath}`;
-          const text = `![${filePath}](${downloadPath})`;
+          const text = extractImage(filePath);
           messageList.push({ content: text, role: message.role })
         }
       }

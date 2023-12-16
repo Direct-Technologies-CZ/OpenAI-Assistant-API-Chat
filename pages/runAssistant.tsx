@@ -104,6 +104,7 @@ const RunAssistantPage: NextPage = () => {
     };
 
     const startExistingAssistant = async (assistantId: string | null, threadId?: string | null) => {
+        console.log('start existing assistant ' + assistantId + ' ' + threadId)
         setIsButtonDisabled(true);
         setStartLoading(true);
         if (chatManager && threadId !== null) {
@@ -111,7 +112,7 @@ const RunAssistantPage: NextPage = () => {
                 await chatManager.resumeExistingAssistantThread(assistantId!, threadId!);
                 console.log('Assistant resumed:', chatManager.getChatState());
                 setChatStarted(true);
-
+                addAssistantThreadToLocalStorage(assistantId!, threadId!)
             } catch (error) {
                 console.error('Error starting assistant:', error);
                 if (error instanceof Error) setStatusMessage(`Error: ${error.message}`);
@@ -135,35 +136,29 @@ const RunAssistantPage: NextPage = () => {
                 setStartLoading(false);
             }
         }
-    };
+        if (chatManager && (!('thread' in router.query) || router.query.thread === null || router.query.thread === 'null')) {
+            const {threadId} = chatManager.getChatState();
+            await router.push(`/runAssistant?assistant=${assistantId}&thread=${threadId}`);
+        }
+    }
 
     useEffect(() => {
 
-
-        // if you get only assistant query and no thread query start a new thread with existing assistant, for aesthetic URL purposes
-        if (typeof query.assistant === "string" && query.assistant !== 'null' && !((typeof query.assistant === "string" && query.assistant !== "null" && query.thread === "null"))) {
-            startExistingAssistant(query?.assistant!, null)
-        }
-
-
-        // if you get an initial message in query, set initial message state from chat manager
         if (typeof query.initialMessage === 'string' && query.initialMessage.length > 0) {
-
+            // if you get an initial message in query, set initial message state from chat manager
             setInitialThreadMessage(query.initialMessage)
         }
-
         // if you get both query assistant and query thread run the assistant id and thread
         if (typeof query.assistant === "string" && typeof query.thread === "string" && query.assistant !== 'null' && query.thread !== 'null') {
-
-
             startExistingAssistant(query?.assistant!, query.thread)
-        }
-
-        // identical functionality to first block but not so aesthetic - if you get only the assistant id query and the thread is null, start a new thread with the existing assistant
-        if (typeof query.assistant === "string" && query.assistant !== "null" && query.thread === "null") {
-
+        } else if (typeof query.assistant === "string" && query.assistant !== 'null' && !((typeof query.assistant === "string" && query.assistant !== "null" && query.thread === "null"))) {
+            // if you get only assistant query and no thread query start a new thread with existing assistant, for aesthetic URL purposes
+            startExistingAssistant(query?.assistant!, null)
+        } else if (typeof query.assistant === "string" && query.assistant !== "null" && query.thread === "null") {
+            // identical functionality to first block but not so aesthetic - if you get only the assistant id query and the thread is null, start a new thread with the existing assistant
             startExistingAssistant(query?.assistant!, null)
         }
+
     }, [chatManager, query]);
 
     return (

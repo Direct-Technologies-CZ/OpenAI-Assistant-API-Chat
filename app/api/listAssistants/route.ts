@@ -9,7 +9,6 @@
  * Path: /api/listAssistants
  */
 
-import { Message } from '@/app/components/lists/MessageList';
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from "openai";
 

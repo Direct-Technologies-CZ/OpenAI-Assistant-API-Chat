@@ -1,16 +1,15 @@
 // File: app/api/downloadFile/[file_id]/route.ts
 
 import { NextRequest, NextResponse } from 'next/server'; // Import NextRequest and NextResponse from 'next/server'
-
 import OpenAI from "openai";
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-export async function GET(request: NextRequest, { params }: { params: { file_id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { file_id: string, disposition : string } }) {
     // Extract the file_id from the dynamic route parameter
-    const { file_id } = params;
+    const { file_id, disposition } = params;
 
     // Validate the file_id
     if (!file_id) {
@@ -49,7 +48,7 @@ export async function GET(request: NextRequest, { params }: { params: { file_id:
 
         // Create a new response for the file download
         const headers = new Headers();
-        headers.set('Content-Disposition', `attachment; filename="${fileName}"`);
+        headers.set('Content-Disposition', `${disposition}; filename="${fileName}"`);
 
         return new NextResponse(fileContent, {
             status: 200, // or other appropriate status code

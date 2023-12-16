@@ -163,6 +163,7 @@ class ChatManager {
 
 // Method to start the assistant with a given ID
 async startAssistantWithId(assistantId: string, initialMessage: string): Promise<void> {
+      console.log("start assistant with id " + assistantId)
   try {
 
     this.state.setIsLoadingFirstMessage(true);
@@ -321,8 +322,7 @@ async sendMessage(input: string, type: string, files: File[], fileDetails: any[]
         if (type === 'paint') {
             const paintUrl = await getPainting(input);
             this.getCurrentMessages().push({ role: 'assistant', content: `![Image](${paintUrl})`});
-        }
-        else {
+        } else {
           await submitUserMessage(input, this.state.threadId, this.state.setStatusMessage, ChatFileIds); // Pass the file IDs here
 
           console.log('User message submitted. Running assistant...');
