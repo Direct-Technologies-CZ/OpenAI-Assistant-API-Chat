@@ -116,7 +116,15 @@ const AssistantList: FC<AssistantListProps> = ({}) => {
                     setIsModalOpen(false);
                 }}>
 
-                <div className="space-y-6 p-4">
+                <div className="relative space-y-6 p-4 bg-white rounded-lg shadow-inner">
+                    {/* Close button */}
+                    <button
+                        onClick={() => setIsModalOpen(false)}
+                        className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+                        aria-label="Close">
+                        <span className="text-2xl">&times;</span>
+                    </button>
+
                     <h3 className="text-lg font-medium leading-6 text-gray-900">Initial Message</h3>
                     <p className="text-sm text-gray-600">
                         Set an initial message for the thread. If not set, it will default to "Say hi to user!"
@@ -125,87 +133,96 @@ const AssistantList: FC<AssistantListProps> = ({}) => {
                         <TextInput setInputValue={setCurrentInitialThreadMessage}
                                    inputValue={currentInitialThreadMessage}/>
                     </div>
-                    <button onClick={() => {
-                        setIsModalOpen(false);
-
-                        router.push(`/runAssistant?assistant=${currentAssistantId}&thread=${currentThreadId}&initialMessage=${currentInitialThreadMessage}`)
-                    }}
-                            className="w-full sm:w-auto mt-4 bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">
-                        Start assistant!
-                    </button>
+                    <div className="flex justify-center">
+                        <button onClick={() => {
+                            setIsModalOpen(false);
+                            router.push(`/runAssistant?assistant=${currentAssistantId}&thread=${currentThreadId}&initialMessage=${currentInitialThreadMessage}`)
+                        }}
+                                className="text-[#5a2382] border-[#5a2382] bg-white font-bold py-2 px-4 rounded-full transition-colors duration-150 hover:bg-[#F5EFFB] border-2">
+                            Start assistant!
+                        </button>
+                    </div>
                 </div>
             </Modal>
 
-            <div className="grid sm:flex sm:flex-col overflow-x-auto ">
-                <div className="overflow-x-scroll">
-                    <table className="min-w-full divide-y divide-gray-200 table-fixed text-center">
-                        <thead>
-                        <tr>
-                            <th className="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-left">Name</th>
-                            <th className="px-2 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-left">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                        {savedAssistants.map((assistant, index) => (
-                            <tr key={index}>
-                                <td className="px-6 py-4 whitespace-nowrap align-top text-left">
-                                    <div onClick={() => toggleInstructions(index)} className="cursor-pointer underline">
-                                        {assistant.name}
-                                    </div>
-                                    {shownInstructions[index] ? (
-                                            <div className="overflow-auto cursor-pointer align-top max-w-prose whitespace-pre-wrap"
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex flex-col mt-8">
+                    <div className="align-middle rounded-lg min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gradient-to-r from-[#5a2382] via-[#8868b3] to-[#a59cc6] text-white">
+                            <tr>
+                                <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">
+                                    Name
+                                </th>
+                                <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">
+                                    Actions
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                            {savedAssistants.map((assistant, index) => (
+                                <tr key={index}>
+                                    <td className="w-1/2 px-6 py-4 whitespace-nowrap align-top text-left overflow-hidden">
+                                        <div onClick={() => toggleInstructions(index)} className="cursor-pointer underline text-ellipsis overflow-hidden">
+                                            {assistant.name}
+                                        </div>
+                                        {shownInstructions[index] && (
+                                            <div className="overflow-auto cursor-pointer max-w-prose whitespace-pre-wrap"
                                                  onClick={() => toggleInstructions(index)}>
                                                 {assistant.instructions}
                                             </div>
-                                        ):''}
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap align-top">
-                                    <div className="flex space-x-3">
-                                        <button
-                                            onClick={() => {
-                                                console.log(assistant.threadId)
-                                                console.log(assistant.id)
-                                                if (assistant.threadId) {
-                                                    router.push(`/runAssistant?assistant=${assistant.id}&thread=${assistant.threadId}`)
-                                                } else {
-                                                    handleStartExistingAssistant(assistant.id, null)
-                                                }
-                                            }
-
-
-                                            }
-                                            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                            Start
-                                        </button>
-                                        {assistant.threadId && (
-                                            <button
-                                                onClick={() => clearAssistantThread(assistant?.id!)}
-                                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                                Clear thread
-                                            </button>
                                         )}
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
-                </div>
-                <div className="border-t border-gray-200 mt-4"></div>
-                {/* Horizontal border added here */}
+                                    </td>
+                                    <td className="w-1/2 px-6 py-4 whitespace-nowrap align-top text-left">
+                                        <div className="flex space-x-3 justify-start">
+                                                <button
+                                                    onClick={() => {
+                                                        console.log(assistant.threadId)
+                                                        console.log(assistant.id)
+                                                        if (assistant.threadId) {
+                                                            router.push(`/runAssistant?assistant=${assistant.id}&thread=${assistant.threadId}`)
+                                                        } else {
+                                                            handleStartExistingAssistant(assistant.id, null)
+                                                        }
+                                                    }
 
-                <div className="flex justify-between my-4 items-center">
-                    {currentPage === 0 ?
-                        (<p></p>) :
-                        (<button onClick={() => setCurrentPage(currentPage - 1)}
-                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-4 rounded">
-                            Previous
-                        </button>)}
-                    {indexOfLastDisplayedAssistant !== (allSavedAssistants.length - 1) &&
-                        (<button onClick={() => setCurrentPage(currentPage + 1)}
-                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-4 rounded">
-                            Next
-                        </button>)}
+
+                                                    }
+                                                    className="text-[#5a2382] border-[#5a2382] bg-white font-bold py-2 px-4 rounded-full transition-colors duration-150 hover:bg-[#F5EFFB] border-2">
+                                                    Start
+                                                </button>
+                                                {assistant.threadId && (
+                                                    <button
+                                                        onClick={() => clearAssistantThread(assistant?.id!)}
+                                                        className="text-white font-bold py-2 px-4 rounded-full transition-colors duration-150 border-transparent hover:brightness-110"
+                                                        style={{
+                                                            background: 'radial-gradient(transparent 20px, rgb(90, 83, 225) 20px, rgb(90, 83, 225) 21px, transparent 21px), linear-gradient(to right, rgb(90, 83, 225), rgb(204, 126, 255)), radial-gradient(circle at 0% 100%, transparent 20px, rgb(204, 126, 255) 20px, rgb(204, 126, 255) 21px, transparent 21px), linear-gradient(rgb(204, 126, 255), rgb(90, 83, 225)), radial-gradient(circle at 0% 0%, transparent 20px, rgb(90, 83, 225) 20px, rgb(90, 83, 225) 21px, transparent 21px), linear-gradient(to left, rgb(90, 83, 225), rgb(204, 126, 255)), radial-gradient(circle at 100% 0%, transparent 20px, rgb(204, 126, 255) 20px, rgb(204, 126, 255) 21px, transparent 21px), linear-gradient(to top, rgb(204, 126, 255), rgb(90, 83, 225))'
+                                                        }}>
+                                                        Clear thread
+                                                    </button>
+                                                )}
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    {/* <div className="py-2 align-middle inline-block min-w-full">
+                        <div className="shadow overflow-hidden border-gray-200 sm:rounded-lg">
+                            {currentPage === 0 ?
+                                (<p></p>) :
+                                (<button onClick={() => setCurrentPage(currentPage - 1)}
+                                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-4 rounded">
+                                    Previous
+                                </button>)}
+                            {indexOfLastDisplayedAssistant !== (allSavedAssistants.length - 1) &&
+                                (<button onClick={() => setCurrentPage(currentPage + 1)}
+                                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-4 rounded">
+                                    Next
+                                </button>)}
+                        </div>
+                    </div>*/}
                 </div>
             </div>
         </>

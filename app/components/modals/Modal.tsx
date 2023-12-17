@@ -19,7 +19,7 @@ const Modal: React.FC<ModalPropsWithChildren> = ({ showModal, onClose, children 
   // Use React portal to render the modal as a child of 'body'
   return ReactDOM.createPortal(
     <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-md">
         {children}
       </div>
     </div>,
