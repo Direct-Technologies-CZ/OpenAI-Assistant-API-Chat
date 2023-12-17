@@ -44,18 +44,18 @@ const Message: FC<MessageProps> = ({ message, progress, isFirstMessage, fileDeta
       <div className="flex w-full max-w-screen-md items-start space-x-4 px-5 sm:px-0">
         <div
           className={clsx(
-            "p-1.5 text-white",
-            message?.role === "assistant" ? "bg-green-500" : "bg-black"
+            "p-1.5 text-white rounded-full",
+            message?.role === "assistant" ? "bg-[#becd00]" : "bg-black"
           )}
         >
-          {message?.role === "user" ? <User width={20} /> : <Bot width={20} />}
+          {message?.role === "user" ? <User width={25} /> : <Bot width={25} />}
         </div>
         {message?.role === "assistant" && message.isLoading ? (
           <>
             <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
-              <div className={clsx("h-full bg-green-500", isFirstMessage ? "animate-spin-slow" : "")} style={{ width: `${progress}%` }}></div>
+              <div className={clsx("h-full bg-[#becd00]", isFirstMessage ? "animate-spin-slow" : "")} style={{ width: `${progress}%` }}></div>
             </div>
-            <div className="w-full flex items-center justify-center text-xs text-green-500">
+            <div className="w-full flex items-center justify-center text-xs text-[#becd00]">
               {message.statusMessage}
             </div>
           </>
@@ -123,9 +123,9 @@ const MessageList: FC<MessageListProps> = ({ chatMessages, statusMessage, isSend
       {isFirstMessage && (
         <div className="status-messages">
           <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
-            <div className={clsx("h-full bg-green-500 animate-pulse", isFirstMessage ? "animate-spin-slow" : "")} style={{ width: `${progress}%` }}></div>
+            <div className={clsx("h-full bg-[#becd00] animate-pulse", isFirstMessage ? "animate-spin-slow" : "")} style={{ width: `${progress}%` }}></div>
           </div>
-          <div className="w-full flex items-center justify-center text-xs text-green-500">
+          <div className="w-full flex items-center justify-center text-xs text-[#becd00]">
             {statusMessage}
           </div>
         </div>

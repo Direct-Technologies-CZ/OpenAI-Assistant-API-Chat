@@ -82,23 +82,23 @@ const InputForm: React.FC<InputFormProps> = ({ input, setInput, handleFormSubmit
             multiple
             accept=".c,.cpp,.csv,.docx,.html,.java,.json,.md,.pdf,.pptx,.txt,.tex,image/jpeg,image/png"
           />
-          <label 
-            htmlFor="file-upload" 
-            className={clsx(
-              "absolute inset-y-0 left-3 my-auto flex h-8 w-8 items-center justify-center rounded-md transition-all",
-              disabled || !chatStarted || isSending
-                ? "cursor-not-allowed bg-gray-300"
-                : "bg-blue-500 hover:bg-blue-600",
-            )}
-          >
-            <span className="text-white text-lg">+</span>
-          </label>
+            <label
+                htmlFor="file-upload"
+                className={clsx(
+                    "text-white absolute inset-y-0 left-3 my-auto flex h-8 w-8 items-center justify-center rounded-md transition-all",
+                    disabled || !chatStarted || isSending
+                        ? "cursor-not-allowed bg-gray-300"
+                        : "bg-[#becd00] hover:brightness-110",
+                )}
+            >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M9 7C9 4.23858 11.2386 2 14 2C16.7614 2 19 4.23858 19 7V15C19 18.866 15.866 22 12 22C8.13401 22 5 18.866 5 15V9C5 8.44772 5.44772 8 6 8C6.55228 8 7 8.44772 7 9V15C7 17.7614 9.23858 20 12 20C14.7614 20 17 17.7614 17 15V7C17 5.34315 15.6569 4 14 4C12.3431 4 11 5.34315 11 7V15C11 15.5523 11.4477 16 12 16C12.5523 16 13 15.5523 13 15V9C13 8.44772 13.4477 8 14 8C14.5523 8 15 8.44772 15 9V15C15 16.6569 13.6569 18 12 18C10.3431 18 9 16.6569 9 15V7Z" fill="currentColor"></path></svg>
+            </label>
           <button
             className={clsx(
               "absolute inset-y-0 right-12 my-auto flex h-8 w-8 items-center justify-center rounded-md transition-all",
               disabled || !chatStarted || input.trim().length === 0 || isSending
                 ? "cursor-not-allowed bg-white"
-                : "bg-green-500 hover:bg-green-600",
+                : "bg-[#becd00] hover:brightness-110",
             )}
             disabled={disabled || !chatStarted || isLoading || isSending}
           >
@@ -119,7 +119,7 @@ const InputForm: React.FC<InputFormProps> = ({ input, setInput, handleFormSubmit
                     "absolute inset-y-0 right-3 my-auto flex h-8 w-8 items-center justify-center rounded-md transition-all",
                     disabled || !chatStarted || input.trim().length === 0 || isSending
                         ? "cursor-not-allowed bg-white"
-                        : "bg-green-500 hover:bg-green-600",
+                        : "bg-[#5a2382] hover:brightness-125",
                 )}
                 disabled={disabled || !chatStarted || isSending}
             >
