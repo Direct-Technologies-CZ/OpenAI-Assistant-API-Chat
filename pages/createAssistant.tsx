@@ -39,7 +39,7 @@ export default function Chat() {
         setStartLoading(true);
         if (chatManager) {
             try {
-                let initialMessage = initialThreadMessage || "say hi to user";
+                let initialMessage = initialThreadMessage || "introduce yourself";
                 await chatManager.startAssistant({assistantName, assistantModel, assistantDescription}, files, initialMessage);
                 console.log('Assistant started:', chatManager.getChatState());
                 const {assistantId, threadId} = chatManager.getChatState()

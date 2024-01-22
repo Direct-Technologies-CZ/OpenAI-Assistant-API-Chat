@@ -100,7 +100,7 @@ const WelcomeForm: React.FC<WelcomeFormProps> = ({
                     />
 
                     <textarea
-                        placeholder="Initial thread message, if not set defaults to 'say hi to user!'"
+                        placeholder="Initial thread message, if not set defaults to 'introduce yourself'"
                         value={initialThreadMessage}
                         onChange={(e) => setInitialThreadMessage(e.target.value)}
                         required
