@@ -11,8 +11,9 @@ import {
     fetchAssistantResponse,
     getPainting
 } from '@/app/modules/chatModules';
-import { cancelOngoingRun, listMessages, listRuns } from '@/app/services/api';
+import {cancelOngoingRun, listMessages, listRuns, uploadFile, uploadImageAndGetDescription} from '@/app/services/api';
 import messageList from "@/app/components/lists/MessageList";
+import {convertFileToBase64} from "@/app/utils/convertFileToBase64";
 
 /**
  * Interface for the state of the chat
@@ -86,7 +87,7 @@ class ChatManager {
       // Upload the files
       this.state.setStatusMessage('Starting upload...');
       console.log('Files:', files);
-      const fileIds = files ? await Promise.all(files.map(file => prepareUploadFile(file, this.state.setStatusMessage, initialMessage, this.state.messages))) : [];
+      const fileIds = files ? await Promise.all(files.map(file => prepareUploadFile(file, this.state.setStatusMessage))) : [];
       console.log('File IDs:', fileIds);
       if (fileIds.map(String).includes('null')) {
         throw new Error('One or more file IDs are null');
@@ -310,14 +311,28 @@ async sendMessage(input: string, type: string, files: File[], fileDetails: any[]
       if (files.length > 0) {
         this.state.setStatusMessage('Starting upload...');
         console.log('Files in Chat:', files);
-        ChatFileIds = await Promise.all(files.map(file => prepareUploadFile(file, this.state.setStatusMessage, input, this.state.messages)));
-        console.log('File IDs during Chat:', ChatFileIds);
-        if (ChatFileIds.map(String).includes('null')) {
-          throw new Error('One or more file IDs are null');
+
+        if (files.length == 1 && files[0].type.startsWith('image/')) {
+            const file = files[0];
+            const base64Image = await convertFileToBase64(file);
+
+            const descriptionResponse = await uploadImageAndGetDescription(base64Image, input);
+
+            const newAssistantMessage = { role: 'assistant', content: descriptionResponse.analysis };
+            this.state.messages = [...this.state.messages, newAssistantMessage];
+            this.state.setChatMessages(this.state.messages);
+            return;
+        } else {
+            ChatFileIds = await Promise.all(files.map(file => prepareUploadFile(file, this.state.setStatusMessage)));
+            console.log('File IDs during Chat:', ChatFileIds);
+            if (ChatFileIds.map(String).includes('null')) {
+                throw new Error('One or more file IDs are null');
+            }
+            this.state.setStatusMessage('Upload complete..');
+            console.log('File IDs during Chat:', ChatFileIds);
         }
-        this.state.setStatusMessage('Upload complete..');
       }
-      console.log('File IDs during Chat:', ChatFileIds);
+
       // Submit the user's message
         if (type === 'paint') {
             const paintUrl = await getPainting(input);

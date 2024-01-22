@@ -13,7 +13,7 @@ export const listAssistants = async (limit: number, before?: string, after?: str
 };
 
 // Uploads a base64 encoded image and gets a description
-export const uploadImageAndGetDescription = async (base64Image: unknown, prompt: string) => {
+export const uploadImageAndGetDescription = async (base64Image: unknown, prompt: string | null) => {
     console.log('Uploading image...');
     const response = await fetch('/api/upload_gpt4v', {
       method: 'POST',
