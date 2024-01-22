@@ -86,7 +86,7 @@ class ChatManager {
       // Upload the files
       this.state.setStatusMessage('Starting upload...');
       console.log('Files:', files);
-      const fileIds = files ? await Promise.all(files.map(file => prepareUploadFile(file, this.state.setStatusMessage))) : [];
+      const fileIds = files ? await Promise.all(files.map(file => prepareUploadFile(file, this.state.setStatusMessage, this.state.messages))) : [];
       console.log('File IDs:', fileIds);
       if (fileIds.map(String).includes('null')) {
         throw new Error('One or more file IDs are null');
@@ -310,7 +310,7 @@ async sendMessage(input: string, type: string, files: File[], fileDetails: any[]
       if (files.length > 0) {
         this.state.setStatusMessage('Starting upload...');
         console.log('Files in Chat:', files);
-        ChatFileIds = await Promise.all(files.map(file => prepareUploadFile(file, this.state.setStatusMessage)));
+        ChatFileIds = await Promise.all(files.map(file => prepareUploadFile(file, this.state.setStatusMessage, this.state.messages)));
         console.log('File IDs during Chat:', ChatFileIds);
         if (ChatFileIds.map(String).includes('null')) {
           throw new Error('One or more file IDs are null');

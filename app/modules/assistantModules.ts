@@ -34,7 +34,7 @@ interface ThreadDataResponse {
 * @param {File} file - The file to be uploaded.
 * @returns {Promise<string>} - The ID of the uploaded file.
 */
-export const prepareUploadFile = async (file: File, setStatusMessage: (message: string) => void): Promise<string> => {
+export const prepareUploadFile = async (file: File, setStatusMessage: (message: string) => void, messages: any[]): Promise<string> => {
   setStatusMessage('Preparing file for upload...');
 
   // If the file is an image, get a description from GPT-4 Vision API
@@ -45,7 +45,12 @@ export const prepareUploadFile = async (file: File, setStatusMessage: (message: 
     setStatusMessage('Getting image description...');
     const descriptionResponse = await uploadImageAndGetDescription(base64Image);
 
+    if (messages) {
+        messages.push({role: 'bot', content: descriptionResponse.analysis});
+    }
+
     setStatusMessage('Creating description file...');
+
     const descriptionBlob = new Blob([descriptionResponse.analysis], { type: 'text/plain' });
     const descriptionFile = new File([descriptionBlob], 'description.txt');
 
