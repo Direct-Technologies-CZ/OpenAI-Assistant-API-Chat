@@ -11,6 +11,7 @@ import {LoadingCircle} from "@/app/icons";
 import React from "react";
 
 
+const welcomeMessage = "Introduce yourself";
 export default function Chat() {
     const {
         assistantName, setAssistantName,
@@ -31,7 +32,7 @@ export default function Chat() {
     } = useChatState();
 
     useChatManager(setChatMessages, setStatusMessage, setChatManager, setIsMessageLoading, setProgress, setIsLoadingFirstMessage);
-    useStartAssistant(assistantId, chatManager, initialThreadMessage || "say hi to user");
+    useStartAssistant(assistantId, chatManager, initialThreadMessage || welcomeMessage);
 
 
     const startChatAssistant = async () => {
@@ -39,7 +40,7 @@ export default function Chat() {
         setStartLoading(true);
         if (chatManager) {
             try {
-                let initialMessage = initialThreadMessage || "introduce yourself";
+                let initialMessage = initialThreadMessage || welcomeMessage;
                 await chatManager.startAssistant({assistantName, assistantModel, assistantDescription}, files, initialMessage);
                 console.log('Assistant started:', chatManager.getChatState());
                 const {assistantId, threadId} = chatManager.getChatState()

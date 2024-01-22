@@ -10,6 +10,7 @@ import {useRouter} from 'next/router';
 import React, {useEffect} from 'react';
 
 
+const welcomeMessage = "Introduce yourself";
 const RunAssistantPage: NextPage = () => {
 
     const {
@@ -120,7 +121,7 @@ const RunAssistantPage: NextPage = () => {
             }
         } else if (chatManager) {
             try {
-                await chatManager.startAssistantWithId(assistantId!, initialThreadMessage || "Say hi to user!");
+                await chatManager.startAssistantWithId(assistantId!, initialThreadMessage || welcomeMessage);
                 console.log('Assistant started:', chatManager.getChatState());
                 const {threadId} = chatManager.getChatState()
                 addAssistantThreadToLocalStorage(assistantId!, threadId!)

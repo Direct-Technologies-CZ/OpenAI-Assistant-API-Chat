@@ -127,7 +127,7 @@ const AssistantList: FC<AssistantListProps> = ({}) => {
 
                     <h3 className="text-lg font-medium leading-6 text-gray-900">Initial Message</h3>
                     <p className="text-sm text-gray-600">
-                        Set an initial message for the thread. If not set, it will default to "Say hi to user!"
+                        Set an initial message for the thread. If not set, it will default to "Introduce yourself"
                     </p>
                     <div className="pb-4">
                         <TextInput setInputValue={setCurrentInitialThreadMessage}
