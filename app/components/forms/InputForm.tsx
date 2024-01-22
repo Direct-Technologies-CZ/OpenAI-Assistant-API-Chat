@@ -80,7 +80,7 @@ const InputForm: React.FC<InputFormProps> = ({ input, setInput, handleFormSubmit
             onChange={handleChatFilesUpload}
             disabled={disabled || !chatStarted || isSending}
             multiple
-            accept=".c,.cpp,.csv,.docx,.html,.java,.json,.md,.pdf,.pptx,.txt,.tex,image/jpeg,image/png"
+            accept=".xls,.xlsx,.xlsm,.c,.cpp,.csv,.docx,.html,.java,.json,.md,.pdf,.pptx,.txt,.tex,image/jpeg,image/png"
           />
             <label
                 htmlFor="file-upload"

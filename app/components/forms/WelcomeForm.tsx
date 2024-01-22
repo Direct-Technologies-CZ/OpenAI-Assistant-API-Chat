@@ -141,7 +141,7 @@ const WelcomeForm: React.FC<WelcomeFormProps> = ({
                         <input
                             id="file-input"
                             type="file"
-                            accept=".c,.cpp,.csv,.docx,.html,.java,.json,.md,.pdf,.pptx,.txt,.tex,image/jpeg,image/png"
+                            accept=".xls,.xlsx,.xlsm,.c,.cpp,.csv,.docx,.html,.java,.json,.md,.pdf,.pptx,.txt,.tex,image/jpeg,image/png"
                             onChange={(e) => {
                                 if (e.target.files) {
                                     handleFilesChange(Array.from(e.target.files));
