@@ -47,7 +47,7 @@ const AssistantList: FC<AssistantListProps> = ({}) => {
 
     const [currentPage, setCurrentPage] = useState(0);
     // can change from 1-100
-    const assistantsPerPage = 20;
+    const assistantsPerPage = 100;
     // can change from 20-100
     const maxInitialFetchedAssistants = 100;
 
