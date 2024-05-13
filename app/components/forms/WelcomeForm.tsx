@@ -110,8 +110,8 @@ const WelcomeForm: React.FC<WelcomeFormProps> = ({
                     <div className='flex space-x-3'>
                         <button
                             type="button"
-                            onClick={() => setAssistantModel('gpt-4-1106-preview')}
-                            className={`p-1 border border-gray-400 rounded-md ${assistantModel === 'gpt-4-1106-preview' ? 'bg-blue-500 text-white' : ''}`}
+                            onClick={() => setAssistantModel('gpt-4-turbo')}
+                            className={`p-1 border border-gray-400 rounded-md ${assistantModel === 'gpt-4-turbo' ? 'bg-blue-500 text-white' : ''}`}
                             //######################################
                             //just delete the disabled prop to enable GPT4
                             //disabled GPT4 because its expensive in the Demo
@@ -122,8 +122,8 @@ const WelcomeForm: React.FC<WelcomeFormProps> = ({
                         </button>
                         <button
                             type="button"
-                            onClick={() => setAssistantModel('gpt-3.5-turbo-1106')}
-                            className={`p-1 border border-gray-400 rounded-md ${assistantModel === 'gpt-3.5-turbo-1106' ? 'bg-blue-500 text-white' : ''}`}
+                            onClick={() => setAssistantModel('gpt-3.5-turbo')}
+                            className={`p-1 border border-gray-400 rounded-md ${assistantModel === 'gpt-3.5-turbo' ? 'bg-blue-500 text-white' : ''}`}
                         >
                             GPT-3.5
                         </button>
