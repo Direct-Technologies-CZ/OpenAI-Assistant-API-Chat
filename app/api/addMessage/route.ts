@@ -28,6 +28,23 @@ export async function POST(req: NextRequest) {
     const input = data.input;
     const fileIds = data.fileIds; // This is the new line
 
+    const attachments = [];
+      if(fileIds){
+          for(const fileId of fileIds){
+              attachments.push({
+                file_id: fileId,
+                tools: [
+                    {
+                        type: "file_search" as const
+                    },
+                    {
+                        type: "code_interpreter" as const
+                    }
+                ]
+            })
+        }
+    }
+
     // Log the received thread ID, input, and fileIds for debugging purposes
     console.log(`inside add_Message -Thread ID: ${threadId}`);
     console.log(`inside add_Message -Input: ${input}`);
@@ -38,15 +55,15 @@ export async function POST(req: NextRequest) {
       throw new Error('Input is not a string');
     }
 
-    // If input is provided, create a new message in the thread using the OpenAI API
+      // If input is provided, create a new message in the thread using the OpenAI API
     if (input) {
-      await openai.beta.threads.messages.create(threadId, {
-        role: "user",
-        content: input,
-        file_ids: fileIds || [], // This is the new line
-      });
-      console.log("add_Message successfully");
-      return NextResponse.json({ message: "Message created successfully" });
+        await openai.beta.threads.messages.create(threadId, {
+            role: "user",
+            content: input,
+            attachments:attachments
+        });
+        console.log("add_Message successfully");
+        return NextResponse.json({ message: "Message created successfully" });
     }
 
     // Respond with a message indicating no action was performed if input is empty
