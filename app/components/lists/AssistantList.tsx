@@ -1,5 +1,6 @@
 import TextInput from "@/app/components/inputs/TextInput";
 import Modal from "@/app/components/modals/Modal";
+import DeprecationMessage from "@/app/components/messages/DeprecationMessage";
 import {listAssistants} from "@/app/services/api";
 import {
     clearAssistantThreadFromLocalStorage,
@@ -148,6 +149,7 @@ const AssistantList: FC<AssistantListProps> = ({}) => {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col mt-8">
                     <div className="align-middle rounded-lg min-w-full overflow-x-auto shadow overflow-hidden sm:rounded-lg">
+                        <DeprecationMessage>
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gradient-to-r from-[#5a2382] via-[#8868b3] to-[#a59cc6] text-white">
                             <tr>
@@ -207,6 +209,7 @@ const AssistantList: FC<AssistantListProps> = ({}) => {
                             ))}
                             </tbody>
                         </table>
+                        </DeprecationMessage>
                     </div>
                     {/* <div className="py-2 align-middle inline-block min-w-full">
                         <div className="shadow overflow-hidden border-gray-200 sm:rounded-lg">
